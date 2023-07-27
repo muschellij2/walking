@@ -1,0 +1,18 @@
+Package: walking
+Title: Segments Accelerometry Data into Walking using the Python `forest` Module
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "John",
+           family = "Muschelli",
+           role = c("aut", "cre"),
+           email = "muschellij2@gmail.com",
+           comment = c(ORCID = "0000-0001-6469-1750"))
+Description: Interfaces the `forest` Python 
+    module <https://github.com/onnela-lab/forest> in order to segment
+    walking and other activities from accelerometry data.
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Imports: 
+    reticulate
