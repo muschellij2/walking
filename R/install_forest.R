@@ -7,6 +7,7 @@
 #'
 #' @return Output of [reticulate::py_install]
 #' @export
+#' @rdname forest_setup
 install_forest = function(ref = "develop", ...) {
   url = "https://github.com/onnela-lab/forest"
   url = paste0("git+", url)
@@ -14,3 +15,26 @@ install_forest = function(ref = "develop", ...) {
   url = paste0(url, "@", ref)
   reticulate::py_install(url, pip = TRUE, ...)
 }
+
+#' @export
+#' @rdname forest_setup
+have_forest = function() {
+  reticulate::py_module_available("forest")
+}
+
+
+module_version = function(module = "numpy") {
+  assertthat::is.scalar(module)
+  if (!reticulate::py_module_available(module)) {
+    stop(paste0(module, " is not installed!"))
+  }
+  df = reticulate::py_list_packages()
+  df$version[df$package == module]
+}
+
+#' @export
+#' @rdname forest_setup
+forest_version = function() {
+  module_version("forest")
+}
+

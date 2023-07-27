@@ -2,9 +2,15 @@
 % Please edit documentation in R/install_forest.R
 \name{install_forest}
 \alias{install_forest}
+\alias{have_forest}
+\alias{forest_version}
 \title{Install the \code{forest} Python Module}
 \usage{
 install_forest(ref = "develop", ...)
+
+have_forest()
+
+forest_version()
 }
 \arguments{
 \item{ref}{Git reference to install, default is \code{main}.  Use \code{develop} for

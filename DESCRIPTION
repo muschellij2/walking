@@ -8,7 +8,7 @@ Authors@R:
            email = "muschellij2@gmail.com",
            comment = c(ORCID = "0000-0001-6469-1750"))
 Description: Interfaces the `forest` Python 
-    module <https://github.com/onnela-lab/forest> in order to segment
+    module <https://github.com/onnela-lab/forest> to segment
     walking and other activities from accelerometry data.
 License: GPL (>= 3)
 Encoding: UTF-8
