@@ -77,10 +77,13 @@ preprocess_bout = function(data, sample_rate = 10L) {
     vm_bout$time,
     tz = tz,
     origin = lubridate::origin)
+  vm_data$time = floor(vm_data$time)
 
   vm_data$time = seq(vm_data$time[1],
                      vm_data$time[length(vm_data$time)] + 1,
                      by = 1/sample_rate)
+  vm_data$time = vm_data$time[1:length(vm_data$vm)]
+
   vm_data$time = as.POSIXct(
     vm_data$time,
     tz = tz,

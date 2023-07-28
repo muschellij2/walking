@@ -71,7 +71,7 @@ find_walking = function(
     delta = delta)
 
   vm_bout = pp_out$vm_bout
-  vm_bout$cadence = cadence_bout
+  vm_bout$steps = cadence_bout
   vm_bout$vm = NULL
   vm_bout = as.data.frame(vm_bout)
 
