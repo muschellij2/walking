@@ -1,4 +1,3 @@
-data = readr::read_csv("inst/test_data_bout.csv")
 
 standardize_data = function(df, subset = TRUE) {
   HEADER_TIMESTAMP = TIME = HEADER_TIME_STAMP = X = Y = Z = NULL
@@ -20,6 +19,32 @@ standardize_data = function(df, subset = TRUE) {
       dplyr::select(HEADER_TIME_STAMP, X, Y, Z)
   }
   df
+}
+
+
+process_vm_bout = function(vm_bout) {
+  names(vm_bout) = c("time", "vm")
+  # vm_data = reticulate::py_to_r(vm_bout)
+  vm_data = vm_bout
+
+  vm_bout$time = as.POSIXct(
+    vm_bout$time,
+    tz = tz,
+    origin = lubridate::origin)
+  vm_data$time = floor(vm_data$time)
+
+  vm_data$time = seq(vm_data$time[1],
+                     vm_data$time[length(vm_data$time)] + 1,
+                     by = 1/sample_rate)
+  vm_data$time = vm_data$time[1:length(vm_data$vm)]
+
+  vm_data$time = as.POSIXct(
+    vm_data$time,
+    tz = tz,
+    origin = lubridate::origin)
+  vm_data = as.data.frame(vm_data)
+  list(vm_bout = vm_bout,
+       vm_data = vm_data)
 }
 
 #' Preprocesses accelerometer bout to a common format.
@@ -69,26 +94,85 @@ preprocess_bout = function(data, sample_rate = 10L) {
     y_bout = y,
     z_bout = z,
     fs = sample_rate)
-  names(vm_bout) = c("time", "vm")
-  # vm_data = reticulate::py_to_r(vm_bout)
-  vm_data = vm_bout
+  process_vm_bout(vm_bout)
+}
 
-  vm_bout$time = as.POSIXct(
-    vm_bout$time,
-    tz = tz,
-    origin = lubridate::origin)
-  vm_data$time = floor(vm_data$time)
 
-  vm_data$time = seq(vm_data$time[1],
-                     vm_data$time[length(vm_data$time)] + 1,
-                     by = 1/sample_rate)
-  vm_data$time = vm_data$time[1:length(vm_data$vm)]
+#' @rdname preprocess_bout
+#' @export
+preprocess_bout_r = function(data, sample_rate = 10L) {
+  assertthat::assert_that(
+    assertthat::is.count(sample_rate)
+  )
+  sample_rate = as.integer(sample_rate)
 
-  vm_data$time = as.POSIXct(
-    vm_data$time,
-    tz = tz,
-    origin = lubridate::origin)
-  vm_data = as.data.frame(vm_data)
-  list(vm_bout = vm_bout,
-       vm_data = vm_data)
+  oak = oak_base()
+  np = reticulate::import("numpy")
+  sp = reticulate::import("scipy")
+  interpolate = sp$interpolate
+
+  data = standardize_data(data, subset = TRUE)
+  stopifnot(
+    all(
+      c("HEADER_TIME_STAMP", "X", "Y", "Z") %in% colnames(data)
+    )
+  )
+
+  tz = lubridate::tz(data$HEADER_TIME_STAMP)
+  data$HEADER_TIME_STAMP = as.numeric(data$HEADER_TIME_STAMP)
+  t_bout = np$array(data$HEADER_TIME_STAMP, dtype = "float64")
+  x = np$array(data[["X"]], dtype="float64")
+  y = np$array(data[["Y"]], dtype="float64")
+  z = np$array(data[["Z"]], dtype="float64")
+  rm(data)
+  # xt_bout = t_bout
+
+  t_bout_interp = t_bout - t_bout[1]
+  t_bout_interp = np$arange(t_bout_interp[1],
+                            t_bout_interp[length(t_bout_interp)],
+                            (1/sample_rate))
+  t_bout_interp = t_bout_interp + t_bout[1]
+
+  f = interpolate$interp1d(t_bout, x)
+  x_bout_interp = f(t_bout_interp)
+
+  f = interpolate$interp1d(t_bout, y)
+  y_bout_interp = f(t_bout_interp)
+
+  f = interpolate$interp1d(t_bout, z)
+  z_bout_interp = f(t_bout_interp)
+
+  # adjust bouts using designated function
+  x_bout_interp = oak$adjust_bout(x_bout_interp)
+  y_bout_interp = oak$adjust_bout(y_bout_interp)
+  z_bout_interp = oak$adjust_bout(z_bout_interp)
+
+  # number of full seconds of measurements
+  num_seconds = np$floor(length(x_bout_interp)/sample_rate)
+
+  # trim and decimate t
+  index = 1:as.integer(num_seconds*sample_rate)
+  t_bout_interp = t_bout_interp[index]
+  t_bout_interp = t_bout_interp[seq(1, length(t_bout_interp), by = sample_rate)]
+
+  # calculate vm
+  vm_bout_interp = np$sqrt(x_bout_interp**2 + y_bout_interp**2 +
+                             z_bout_interp**2)
+
+  # standardize measurement to gravity units (g) if its recorded in m/s**2
+  if (np$mean(vm_bout_interp) > 5) {
+    x_bout_interp = x_bout_interp/9.80665
+    y_bout_interp = y_bout_interp/9.80665
+    z_bout_interp = z_bout_interp/9.80665
+  }
+
+  # calculate vm after unit verification
+  vm_bout_interp = np$sqrt(x_bout_interp**2 + y_bout_interp**2 +
+                             z_bout_interp**2) - 1
+
+  vm_bout = list(
+    t_bout_interp,
+    vm_bout_interp
+  )
+  process_vm_bout(vm_bout)
 }
