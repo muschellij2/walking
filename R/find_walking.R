@@ -48,7 +48,8 @@ find_walking = function(
   delta = as.integer(delta)
 
 
-  pp_out = preprocess_bout(data, sample_rate = sample_rate)
+  # pp_out = preprocess_bout(data, sample_rate = sample_rate)
+  pp_out = preprocess_bout_r(data, sample_rate = sample_rate)
   rm(data)
   vm_bout = pp_out$vm_bout$vm
   # step_frequency = do.call(reticulate::tuple, as.list(step_frequency))

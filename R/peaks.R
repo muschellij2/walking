@@ -15,7 +15,7 @@ get_peak = function(
 
   oak = oak_base()
   pp = oak$get_pp(vm_bout = vm_bout,
-                      fs = sample_rate)
+                  fs = sample_rate)
   list(
     preprocess_out = pp_out,
     peaks = pp

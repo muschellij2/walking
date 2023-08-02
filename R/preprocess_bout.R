@@ -22,7 +22,7 @@ standardize_data = function(df, subset = TRUE) {
 }
 
 
-process_vm_bout = function(vm_bout) {
+process_vm_bout = function(vm_bout, tz) {
   names(vm_bout) = c("time", "vm")
   # vm_data = reticulate::py_to_r(vm_bout)
   vm_data = vm_bout
@@ -80,7 +80,7 @@ preprocess_bout = function(data, sample_rate = 10L) {
     )
   )
 
-  tz = lubridate::tz(data$HEADER_TIME_STAMP)
+  orig_tz = lubridate::tz(data$HEADER_TIME_STAMP)
   data$HEADER_TIME_STAMP = as.numeric(data$HEADER_TIME_STAMP)
   timestamp = np$array(data$HEADER_TIME_STAMP, dtype = "float64")
   x = np$array(data[["X"]], dtype="float64")
@@ -94,7 +94,7 @@ preprocess_bout = function(data, sample_rate = 10L) {
     y_bout = y,
     z_bout = z,
     fs = sample_rate)
-  process_vm_bout(vm_bout)
+  process_vm_bout(vm_bout, tz = orig_tz)
 }
 
 
@@ -118,7 +118,7 @@ preprocess_bout_r = function(data, sample_rate = 10L) {
     )
   )
 
-  tz = lubridate::tz(data$HEADER_TIME_STAMP)
+  orig_tz = lubridate::tz(data$HEADER_TIME_STAMP)
   data$HEADER_TIME_STAMP = as.numeric(data$HEADER_TIME_STAMP)
   t_bout = np$array(data$HEADER_TIME_STAMP, dtype = "float64")
   x = np$array(data[["X"]], dtype="float64")
@@ -174,5 +174,5 @@ preprocess_bout_r = function(data, sample_rate = 10L) {
     t_bout_interp,
     vm_bout_interp
   )
-  process_vm_bout(vm_bout)
+  process_vm_bout(vm_bout, tz = orig_tz)
 }
