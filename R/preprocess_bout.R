@@ -22,7 +22,7 @@ standardize_data = function(df, subset = TRUE) {
 }
 
 
-process_vm_bout = function(vm_bout, tz) {
+process_vm_bout = function(vm_bout, tz, sample_rate = 10L) {
   names(vm_bout) = c("time", "vm")
   # vm_data = reticulate::py_to_r(vm_bout)
   vm_data = vm_bout
@@ -94,7 +94,7 @@ preprocess_bout = function(data, sample_rate = 10L) {
     y_bout = y,
     z_bout = z,
     fs = sample_rate)
-  process_vm_bout(vm_bout, tz = orig_tz)
+  process_vm_bout(vm_bout, tz = orig_tz, sample_rate = sample_rate)
 }
 
 
@@ -174,5 +174,5 @@ preprocess_bout_r = function(data, sample_rate = 10L) {
     t_bout_interp,
     vm_bout_interp
   )
-  process_vm_bout(vm_bout, tz = orig_tz)
+  process_vm_bout(vm_bout, tz = orig_tz, sample_rate = sample_rate)
 }
