@@ -42,3 +42,9 @@ Method finds periods of repetitive and continuous oscillations with
 predominant frequency occurring within know step frequency range.
 Frequency components are extracted with Continuous Wavelet Transform.
 }
+\examples{
+csv_file = system.file("test_data_bout.csv", package = "walking")
+x = readr::read_csv(csv_file)
+colnames(x)[colnames(x) == "UTC time"] = "time"
+res = find_walking(data = x)
+}

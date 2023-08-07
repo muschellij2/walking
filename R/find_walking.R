@@ -23,6 +23,10 @@
 #' @export
 #'
 #' @examples
+#' csv_file = system.file("test_data_bout.csv", package = "walking")
+#' x = readr::read_csv(csv_file)
+#' colnames(x)[colnames(x) == "UTC time"] = "time"
+#' res = find_walking(data = x)
 find_walking = function(
     data,
     sample_rate = 10L,
@@ -81,4 +85,5 @@ find_walking = function(
   #                             1.75, 1.7])
   # assert len(cadence_bout) == 10
   # assert np.array_equal(np.round(cadence_bout, 2), expected_output)
+  return(vm_bout)
 }
