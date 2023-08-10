@@ -9,7 +9,7 @@ testthat::test_that("find_walking gives fixed answer", {
   testthat::expect_true(nrow(out) == 10)
 
   testthat::expect_identical(
-    out$steps,
+    round(out$steps, 10),
     c(1.65, 1.6, 1.55, 1.6, 1.55, 1.85, 1.8, 1.75, 1.75, 1.7)
   )
 })

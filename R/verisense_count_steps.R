@@ -150,6 +150,7 @@ create_peak_info = function(segments) {
 #' and then using multiple thresholds to determine if each peak is a step or an artifact.
 #' An additional magnitude threshold was added to the algorithm to prevent false positives
 #' in free living data.
+#'
 #' @param data A `data.frame` with a column for time in `POSIXct` (usually
 #' `HEADER_TIMESTAMP`, not required), and `X`, `Y`, `Z`
 #' @param sample_rate sampling frequency of the input data
@@ -169,6 +170,9 @@ create_peak_info = function(segments) {
 #' @return A vector of length `round(nrow(input_data) / sample_rate)` of the
 #' estimated steps, where the data is rounded to seconds
 #' @export
+#'
+#' @author Matthew R Patterson <mpatterson@shimmersensing.com>
+
 #'
 #' @examples
 #' input_data <- matrix(runif(500 * 3, min = -1.5, max = 1.5), ncol = 3)
