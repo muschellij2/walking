@@ -12,10 +12,14 @@ find_walking(
   alpha = 0.6,
   beta = 2.5,
   min_duration_peak = 3L,
-  delta = 20L
+  delta = 20L,
+  verbose = TRUE
 )
 }
 \arguments{
+\item{data}{A \code{data.frame} with a column for time in \code{POSIXct} (usually
+\code{HEADER_TIMESTAMP}), and \code{X}, \code{Y}, \code{Z}}
+
 \item{sample_rate}{sampling frequency (in Hz) \strong{for analyzing walking}.
 Note, this is \strong{NOT} the sampling frequency of the data.}
 
@@ -33,6 +37,8 @@ and within step frequency range}
 
 \item{delta}{maximum difference between consecutive peaks
 (in multiplication of 0.05Hz)}
+
+\item{verbose}{print diagnostic messages}
 }
 \value{
 A vector of number of steps per second

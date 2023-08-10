@@ -1,25 +1,5 @@
 
-standardize_data = function(df, subset = TRUE) {
-  HEADER_TIMESTAMP = TIME = HEADER_TIME_STAMP = X = Y = Z = NULL
-  rm(list = c("HEADER_TIMESTAMP", "HEADER_TIME_STAMP", "X", "Y", "Z",
-              "TIME"))
-  # uppercase
-  colnames(df) = toupper(colnames(df))
-  cn = colnames(df)
-  if ("TIME" %in% cn && !"HEADER_TIME_STAMP" %in% cn) {
-    df = df %>%
-      dplyr::rename(HEADER_TIME_STAMP = TIME)
-  }
-  if ("HEADER_TIMESTAMP" %in% cn && !"HEADER_TIME_STAMP" %in% cn) {
-    df = df %>%
-      dplyr::rename(HEADER_TIME_STAMP = HEADER_TIMESTAMP)
-  }
-  if (subset) {
-    df = df %>%
-      dplyr::select(HEADER_TIME_STAMP, X, Y, Z)
-  }
-  df
-}
+
 
 
 process_vm_bout = function(vm_bout, tz, sample_rate = 10L) {
@@ -53,7 +33,7 @@ process_vm_bout = function(vm_bout, tz, sample_rate = 10L) {
 #' vector magnitude.
 #'
 #' @param data A `data.frame` with a column for time in `POSIXct` (usually
-#' `HEADER_TIMESTAMP`, and `X`, `Y`, `Z`
+#' `HEADER_TIMESTAMP`), and `X`, `Y`, `Z`
 #' @param sample_rate sampling frequency, coercible to an integer
 #'
 #' @return A list of `vm_bout`, which is an unnamed list of length 2,
@@ -97,6 +77,41 @@ preprocess_bout = function(data, sample_rate = 10L) {
   process_vm_bout(vm_bout, tz = orig_tz, sample_rate = sample_rate)
 }
 
+#' @rdname preprocess_bout
+#' @param subset should only the `HEADER_TIME_STAMP` (if available)
+#' and `XYZ` be subset?
+#' @export
+standardize_data = function(data, subset = TRUE) {
+  HEADER_TIMESTAMP = TIME = HEADER_TIME_STAMP = X = Y = Z = NULL
+  rm(list = c("HEADER_TIMESTAMP", "HEADER_TIME_STAMP", "X", "Y", "Z",
+              "TIME"))
+  if (is.matrix(data)) {
+    if (is.numeric(data)) {
+      stopifnot(ncol(data) == 3)
+      data = as.data.frame(data)
+      colnames(data) = c("X", "Y", "Z")
+    } else {
+      stop("data is a matrix and cannot be coerced to necessary structure")
+    }
+  }
+  # uppercase
+  colnames(data) = toupper(colnames(data))
+  cn = colnames(data)
+  if ("TIME" %in% cn && !"HEADER_TIME_STAMP" %in% cn) {
+    data = data %>%
+      dplyr::rename(HEADER_TIME_STAMP = TIME)
+  }
+  if ("HEADER_TIMESTAMP" %in% cn && !"HEADER_TIME_STAMP" %in% cn) {
+    data = data %>%
+      dplyr::rename(HEADER_TIME_STAMP = HEADER_TIMESTAMP)
+  }
+  if (subset) {
+    data = data %>%
+      dplyr::select(dplyr::any_of("HEADER_TIME_STAMP"), X, Y, Z)
+  }
+  stopifnot(all(c("X", "Y", "Z") %in% colnames(data)))
+  data
+}
 
 #' @rdname preprocess_bout
 #' @export

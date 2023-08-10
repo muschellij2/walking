@@ -4,7 +4,8 @@
 #' predominant frequency occurring within know step frequency range.
 #' Frequency components are extracted with Continuous Wavelet Transform.
 #'
-#' @param data
+#' @param data A `data.frame` with a column for time in `POSIXct` (usually
+#' `HEADER_TIMESTAMP`), and `X`, `Y`, `Z`
 #' @param sample_rate sampling frequency (in Hz) **for analyzing walking**.
 #' Note, this is **NOT** the sampling frequency of the data.
 #'
@@ -17,6 +18,7 @@
 #' @param delta maximum difference between consecutive peaks
 #' (in multiplication of 0.05Hz)
 #' @param min_duration_peak minimum duration of peaks (in seconds)
+#' @param verbose print diagnostic messages
 #'
 #' @return A vector of number of steps per second
 
@@ -35,7 +37,8 @@ find_walking = function(
     alpha = 0.6,
     beta = 2.5,
     min_duration_peak = 3L,
-    delta = 20L
+    delta = 20L,
+    verbose = TRUE
 ) {
 
   assertthat::assert_that(
@@ -52,9 +55,15 @@ find_walking = function(
   delta = as.integer(delta)
 
 
+  if (verbose) {
+    message("Preprocessing Bout")
+  }
   # pp_out = preprocess_bout(data, sample_rate = sample_rate)
   pp_out = preprocess_bout_r(data, sample_rate = sample_rate)
   rm(data)
+  if (verbose) {
+    message("Bout is Preprocessed")
+  }
   vm_bout = pp_out$vm_bout$vm
   # step_frequency = do.call(reticulate::tuple, as.list(step_frequency))
 
@@ -74,7 +83,9 @@ find_walking = function(
     beta = beta,
     min_t = min_duration_peak,
     delta = delta)
-
+  if (verbose) {
+    message("OAK: Find walking is done")
+  }
   vm_bout = pp_out$vm_bout
   vm_bout$steps = cadence_bout
   vm_bout$vm = NULL
