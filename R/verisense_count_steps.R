@@ -187,17 +187,21 @@ verisense_count_steps <- function(
     peak_finder = c("fast", "original")
 ) {
 
-  data = standardize_data(data, subset = TRUE)
+  if (is.vector(data) && is.numeric(data)) {
+    warning("Assuming data is a vector of VM!")
+    acc = data
+  } else {
+    data = standardize_data(data, subset = TRUE)
 
-  acc <- sqrt(data$X^2 + data$Y^2 + data$Z^2)
-  rm(data)
-
+    acc <- sqrt(data$X^2 + data$Y^2 + data$Z^2)
+    rm(data)
+  }
   assertthat::assert_that(
     assertthat::is.count(sample_rate)
   )
 
   n_samples = length(acc)
-  if (sd(acc) < 0.025) {
+  if (stats::sd(acc) < 0.025) {
     # acceleration too low, no steps
     num_seconds <- round(n_samples / sample_rate)
     steps_per_sec <- rep(0, num_seconds)
@@ -282,7 +286,7 @@ verisense_count_steps <- function(
       for (x in 1:continuity_window_size) {
         index = peak_info[i - x + 1, "peak_location"]:peak_info[i - x + 2, "peak_location"]
         sub_acc = acc[index]
-        if (var(sub_acc) > variance_threshold) {
+        if (stats::var(sub_acc) > variance_threshold) {
           v_count <- v_count + 1
         }
       }

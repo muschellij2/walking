@@ -2,13 +2,10 @@
 % Please edit documentation in R/preprocess_bout.R
 \name{preprocess_bout}
 \alias{preprocess_bout}
-\alias{standardize_data}
 \alias{preprocess_bout_r}
 \title{Preprocesses accelerometer bout to a common format.}
 \usage{
 preprocess_bout(data, sample_rate = 10L)
-
-standardize_data(data, subset = TRUE)
 
 preprocess_bout_r(data, sample_rate = 10L)
 }
@@ -17,9 +14,6 @@ preprocess_bout_r(data, sample_rate = 10L)
 \code{HEADER_TIMESTAMP}), and \code{X}, \code{Y}, \code{Z}}
 
 \item{sample_rate}{sampling frequency, coercible to an integer}
-
-\item{subset}{should only the \code{HEADER_TIME_STAMP} (if available)
-and \code{XYZ} be subset?}
 }
 \value{
 A list of \code{vm_bout}, which is an unnamed list of length 2,

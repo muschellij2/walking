@@ -7,6 +7,7 @@ process_vm_bout = function(vm_bout, tz, sample_rate = 10L) {
   # vm_data = reticulate::py_to_r(vm_bout)
   vm_data = vm_bout
 
+  vm_bout$time = round(vm_bout$time, 3)
   vm_bout$time = as.POSIXct(
     vm_bout$time,
     tz = tz,
@@ -77,41 +78,6 @@ preprocess_bout = function(data, sample_rate = 10L) {
   process_vm_bout(vm_bout, tz = orig_tz, sample_rate = sample_rate)
 }
 
-#' @rdname preprocess_bout
-#' @param subset should only the `HEADER_TIME_STAMP` (if available)
-#' and `XYZ` be subset?
-#' @export
-standardize_data = function(data, subset = TRUE) {
-  HEADER_TIMESTAMP = TIME = HEADER_TIME_STAMP = X = Y = Z = NULL
-  rm(list = c("HEADER_TIMESTAMP", "HEADER_TIME_STAMP", "X", "Y", "Z",
-              "TIME"))
-  if (is.matrix(data)) {
-    if (is.numeric(data)) {
-      stopifnot(ncol(data) == 3)
-      data = as.data.frame(data)
-      colnames(data) = c("X", "Y", "Z")
-    } else {
-      stop("data is a matrix and cannot be coerced to necessary structure")
-    }
-  }
-  # uppercase
-  colnames(data) = toupper(colnames(data))
-  cn = colnames(data)
-  if ("TIME" %in% cn && !"HEADER_TIME_STAMP" %in% cn) {
-    data = data %>%
-      dplyr::rename(HEADER_TIME_STAMP = TIME)
-  }
-  if ("HEADER_TIMESTAMP" %in% cn && !"HEADER_TIME_STAMP" %in% cn) {
-    data = data %>%
-      dplyr::rename(HEADER_TIME_STAMP = HEADER_TIMESTAMP)
-  }
-  if (subset) {
-    data = data %>%
-      dplyr::select(dplyr::any_of("HEADER_TIME_STAMP"), X, Y, Z)
-  }
-  stopifnot(all(c("X", "Y", "Z") %in% colnames(data)))
-  data
-}
 
 #' @rdname preprocess_bout
 #' @export
@@ -171,7 +137,8 @@ preprocess_bout_r = function(data, sample_rate = 10L) {
   t_bout_interp = t_bout_interp[seq(1, length(t_bout_interp), by = sample_rate)]
 
   # calculate vm
-  vm_bout_interp = np$sqrt(x_bout_interp**2 + y_bout_interp**2 +
+  vm_bout_interp = np$sqrt(x_bout_interp**2 +
+                             y_bout_interp**2 +
                              z_bout_interp**2)
 
   # standardize measurement to gravity units (g) if its recorded in m/s**2
@@ -182,7 +149,8 @@ preprocess_bout_r = function(data, sample_rate = 10L) {
   }
 
   # calculate vm after unit verification
-  vm_bout_interp = np$sqrt(x_bout_interp**2 + y_bout_interp**2 +
+  vm_bout_interp = np$sqrt(x_bout_interp**2 +
+                             y_bout_interp**2 +
                              z_bout_interp**2) - 1
 
   vm_bout = list(
@@ -190,4 +158,48 @@ preprocess_bout_r = function(data, sample_rate = 10L) {
     vm_bout_interp
   )
   process_vm_bout(vm_bout, tz = orig_tz, sample_rate = sample_rate)
+}
+
+
+
+
+#' Standardize the Accelerometry Data
+#'
+#' @inheritParams preprocess_bout
+#' @param subset should only the `HEADER_TIME_STAMP` (if available)
+#' and `XYZ` be subset?
+#'
+#' @return A `data.frame` with `X/Y/Z` and a time in
+#' `HEADER_TIME_STAMP` (if available).
+#' @export
+standardize_data = function(data, subset = TRUE) {
+  HEADER_TIMESTAMP = TIME = HEADER_TIME_STAMP = X = Y = Z = NULL
+  rm(list = c("HEADER_TIMESTAMP", "HEADER_TIME_STAMP", "X", "Y", "Z",
+              "TIME"))
+  if (is.matrix(data)) {
+    if (is.numeric(data)) {
+      stopifnot(ncol(data) == 3)
+      data = as.data.frame(data)
+      colnames(data) = c("X", "Y", "Z")
+    } else {
+      stop("data is a matrix and cannot be coerced to necessary structure")
+    }
+  }
+  # uppercase
+  colnames(data) = toupper(colnames(data))
+  cn = colnames(data)
+  if ("TIME" %in% cn && !"HEADER_TIME_STAMP" %in% cn) {
+    data = data %>%
+      dplyr::rename(HEADER_TIME_STAMP = TIME)
+  }
+  if ("HEADER_TIMESTAMP" %in% cn && !"HEADER_TIME_STAMP" %in% cn) {
+    data = data %>%
+      dplyr::rename(HEADER_TIME_STAMP = HEADER_TIMESTAMP)
+  }
+  if (subset) {
+    data = data %>%
+      dplyr::select(dplyr::any_of("HEADER_TIME_STAMP"), X, Y, Z)
+  }
+  stopifnot(all(c("X", "Y", "Z") %in% colnames(data)))
+  data
 }

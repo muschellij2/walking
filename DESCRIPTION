@@ -17,10 +17,12 @@ RoxygenNote: 7.2.3
 Imports: 
     assertthat,
     dplyr,
+    lubridate,
     magrittr,
     matrixStats,
     reticulate,
     tidyr
 Suggests: 
+    readr,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
