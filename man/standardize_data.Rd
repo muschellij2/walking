@@ -2,9 +2,12 @@
 % Please edit documentation in R/preprocess_bout.R
 \name{standardize_data}
 \alias{standardize_data}
+\alias{standardise_data}
 \title{Standardize the Accelerometry Data}
 \usage{
 standardize_data(data, subset = TRUE)
+
+standardise_data(data, subset = TRUE)
 }
 \arguments{
 \item{data}{A \code{data.frame} with a column for time in \code{POSIXct} (usually

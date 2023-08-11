@@ -1,0 +1,126 @@
+run_resample = function(
+    timestamp, x, y, z, time_interp, orig_tz, ...) {
+  x_out = stats::approx(x = timestamp, y = x, xout = time_interp,
+                        ...)$y
+  rm(x)
+  y_out = stats::approx(x = timestamp, y = y, xout = time_interp,
+                        ...)$y
+  rm(y)
+  z_out = stats::approx(x = timestamp, y = z, xout = time_interp,
+                        ...)$y
+  rm(z)
+  rm(timestamp)
+
+
+  time_interp = round(time_interp, 3)
+  time_interp = as.POSIXct(
+    time_interp,
+    tz = orig_tz,
+    origin = lubridate::origin)
+
+  out = data.frame(
+    HEADER_TIMESTAMP = time_interp,
+    X = x_out,
+    Y = y_out,
+    Z = z_out
+  )
+  out
+}
+#' Resample 3-axial input signal to a specific sampling rate
+#'
+#' @param data A `data.frame` with a column for time in `POSIXct` (usually
+#' `HEADER_TIME_STAMP`), and `X`, `Y`, `Z`
+#' @param sample_rate sampling frequency, coercible to an integer.
+#' This is the sampling rate you're sampling the data *into*.
+#' @param ... additional arguments to pass to [stats::approx()]
+#' @return A `data.frame`/`tibble` of `HEADER_TIME_STAMP` and `X`, `Y`, `Z`.
+#' @export
+#'
+#' @examples
+#' options(digits.secs = 3)
+#' csv_file = system.file("test_data_bout.csv", package = "walking")
+#' if (requireNamespace("readr", quietly = TRUE)) {
+#'   x = readr::read_csv(csv_file)
+#'   colnames(x)[colnames(x) == "UTC time"] = "time"
+#'
+#'   res = resample_accel_data(data = x, sample_rate = 80)
+#'   res = resample_accel_data(data = x, sample_rate = 100)
+#'   res = resample_accel_data(data = x, sample_rate = 1)
+#' }
+resample_accel_data = function(
+    data,
+    sample_rate,
+    ...
+) {
+  assertthat::assert_that(
+    assertthat::is.count(sample_rate)
+  )
+  sample_rate = as.integer(sample_rate)
+
+  data = standardize_data(data)
+  orig_tz = lubridate::tz(data$HEADER_TIME_STAMP)
+  timestamp = as.numeric(data$HEADER_TIME_STAMP)
+  x = data[["X"]]
+  y = data[["Y"]]
+  z = data[["Z"]]
+  is_data_tibble = inherits(data, "tbl_df")
+  rm(data)
+
+  time_interp = timestamp - timestamp[1]
+  time_interp = seq(time_interp[1],
+                    time_interp[length(time_interp)],
+                    (1/sample_rate)
+  )
+  time_interp = time_interp + timestamp[1]
+
+  out = run_resample(
+    timestamp = timestamp,
+    x = x,
+    y = y,
+    z = z,
+    time_interp = time_interp,
+    orig_tz = orig_tz,
+    ...)
+  if (is_data_tibble) {
+    out = dplyr::as_tibble(out)
+  }
+  return(out)
+}
+
+#' @export
+#' @rdname resample_accel_data
+resample_accel_data_to_time = function(
+    data,
+    times,
+    ...
+) {
+
+  data = standardize_data(data)
+  orig_tz = lubridate::tz(data$HEADER_TIME_STAMP)
+  time_tz = lubridate::tz(times)
+  if (orig_tz != time_tz) {
+    stop("Timezone in data times do not match timezone in time vector!")
+  }
+  timestamp = as.numeric(data$HEADER_TIME_STAMP)
+  x = data[["X"]]
+  y = data[["Y"]]
+  z = data[["Z"]]
+  is_data_tibble = inherits(data, "tbl_df")
+  rm(data)
+
+  time_interp = as.numeric(times)
+  rm(times)
+
+  out = run_resample(
+    timestamp = timestamp,
+    x = x,
+    y = y,
+    z = z,
+    time_interp = time_interp,
+    orig_tz = orig_tz,
+    ...)
+  if (is_data_tibble) {
+    out = dplyr::as_tibble(out)
+  }
+  return(out)
+}

@@ -1,3 +1,5 @@
+
+
 testthat::test_that("find_walking gives fixed answer", {
   csv_file = system.file("test_data_bout.csv", package = "walking")
   testthat::skip_if_not_installed("readr")

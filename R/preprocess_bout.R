@@ -223,6 +223,10 @@ standardize_data = function(data, subset = TRUE) {
   data
 }
 
+#' @export
+#' @rdname standardize_data
+standardise_data = standardize_data
+
 xyz_data = function(data) {
   data = standardize_data(data)
   as.matrix(data[, c("X", "Y", "Z"), drop = FALSE])
