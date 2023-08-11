@@ -6,8 +6,9 @@
 #'
 #' @param data A `data.frame` with a column for time in `POSIXct` (usually
 #' `HEADER_TIMESTAMP`), and `X`, `Y`, `Z`
-#' @param sample_rate sampling frequency (in Hz) **for analyzing walking**.
-#' Note, this is **NOT** the sampling frequency of the data.
+#' @param sample_rate_analysis sampling frequency (in Hz)
+#' **for analyzing walking**. Note, this is **NOT** the sampling
+#' frequency of the data.
 #'
 #' @param min_amplitude minimum amplitude (in g)
 #' @param step_frequency step frequency range
@@ -33,7 +34,7 @@
 #' }
 find_walking = function(
     data,
-    sample_rate = 10L,
+    sample_rate_analysis = 10L,
     min_amplitude = 0.3,
     step_frequency = c(1.4, 2.3),
     alpha = 0.6,
@@ -49,10 +50,10 @@ find_walking = function(
     assertthat::is.scalar(beta),
     assertthat::is.count(min_duration_peak),
     assertthat::is.count(delta),
-    assertthat::is.count(sample_rate),
+    assertthat::is.count(sample_rate_analysis),
     length(step_frequency) == 2
   )
-  sample_rate = as.integer(sample_rate)
+  sample_rate_analysis = as.integer(sample_rate_analysis)
   min_duration_peak = as.integer(min_duration_peak)
   delta = as.integer(delta)
 
@@ -60,8 +61,10 @@ find_walking = function(
   if (verbose) {
     message("Preprocessing Bout")
   }
-  # pp_out = preprocess_bout(data, sample_rate = sample_rate)
-  pp_out = preprocess_bout_r(data, sample_rate = sample_rate)
+  # pp_out = preprocess_bout(data,
+  # sample_rate_analysis = sample_rate_analysis)
+  pp_out = preprocess_bout_r(data,
+                             sample_rate = sample_rate_analysis)
   rm(data)
   if (verbose) {
     message("Bout is Preprocessed")
@@ -78,7 +81,7 @@ find_walking = function(
 
   cadence_bout = oak$find_walking(
     vm_bout = vm_bout,
-    fs = sample_rate,
+    fs = sample_rate_analysis,
     min_amp = min_amplitude,
     step_freq = step_frequency,
     alpha = alpha,

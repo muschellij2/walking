@@ -58,7 +58,8 @@ pythonize_data = function(data) {
 #'
 #' @param data A `data.frame` with a column for time in `POSIXct` (usually
 #' `HEADER_TIMESTAMP`), and `X`, `Y`, `Z`
-#' @param sample_rate sampling frequency, coercible to an integer
+#' @param sample_rate sampling frequency, coercible to an integer.
+#' This is the sampling rate you're sampling the data *into*.
 #'
 #' @return A list of `vm_bout`, which is an unnamed list of length 2,
 #' containing times and VM (vector magnitude) interpolated.  This
@@ -220,4 +221,9 @@ standardize_data = function(data, subset = TRUE) {
   }
   stopifnot(all(c("X", "Y", "Z") %in% colnames(data)))
   data
+}
+
+xyz_data = function(data) {
+  data = standardize_data(data)
+  as.matrix(data[, c("X", "Y", "Z"), drop = FALSE])
 }

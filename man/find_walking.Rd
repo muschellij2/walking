@@ -6,7 +6,7 @@
 \usage{
 find_walking(
   data,
-  sample_rate = 10L,
+  sample_rate_analysis = 10L,
   min_amplitude = 0.3,
   step_frequency = c(1.4, 2.3),
   alpha = 0.6,
@@ -20,8 +20,9 @@ find_walking(
 \item{data}{A \code{data.frame} with a column for time in \code{POSIXct} (usually
 \code{HEADER_TIMESTAMP}), and \code{X}, \code{Y}, \code{Z}}
 
-\item{sample_rate}{sampling frequency (in Hz) \strong{for analyzing walking}.
-Note, this is \strong{NOT} the sampling frequency of the data.}
+\item{sample_rate_analysis}{sampling frequency (in Hz)
+\strong{for analyzing walking}. Note, this is \strong{NOT} the sampling
+frequency of the data.}
 
 \item{min_amplitude}{minimum amplitude (in g)}
 
