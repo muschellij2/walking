@@ -1,6 +1,6 @@
 Package: walking
 Title: Segments Accelerometry Data into Walking using the Python `forest` Module
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: 
     person(given = "John",
            family = "Muschelli",
