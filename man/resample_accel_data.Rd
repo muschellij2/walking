@@ -17,6 +17,9 @@ resample_accel_data_to_time(data, times, ...)
 This is the sampling rate you're sampling the data \emph{into}.}
 
 \item{...}{additional arguments to pass to \code{\link[stats:approxfun]{stats::approx()}}}
+
+\item{times}{a vector of \code{POSIXct} date/time values to interpolate
+the data to}
 }
 \value{
 A \code{data.frame}/\code{tibble} of \code{HEADER_TIME_STAMP} and \code{X}, \code{Y}, \code{Z}.

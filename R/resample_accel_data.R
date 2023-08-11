@@ -88,6 +88,8 @@ resample_accel_data = function(
 }
 
 #' @export
+#' @param times a vector of `POSIXct` date/time values to interpolate
+#' the data to
 #' @rdname resample_accel_data
 resample_accel_data_to_time = function(
     data,
