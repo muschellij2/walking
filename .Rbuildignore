@@ -5,3 +5,5 @@
 ^example\.R$
 ^testing\.py$
 ^R/peaks\.R$
+^\.github$
+^README\.Rmd$
