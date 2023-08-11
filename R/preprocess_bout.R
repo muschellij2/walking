@@ -28,6 +28,29 @@ process_vm_bout = function(vm_bout, tz, sample_rate = 10L) {
        vm_data = vm_data)
 }
 
+pythonize_data = function(data) {
+  np = reticulate::import("numpy")
+
+  data = standardize_data(data, subset = TRUE)
+  stopifnot(
+    all(
+      c("HEADER_TIME_STAMP", "X", "Y", "Z") %in% colnames(data)
+    )
+  )
+
+  orig_tz = lubridate::tz(data$HEADER_TIME_STAMP)
+  data$HEADER_TIME_STAMP = as.numeric(data$HEADER_TIME_STAMP)
+  timestamp = np$array(data$HEADER_TIME_STAMP, dtype = "float64")
+  x = np$array(data[["X"]], dtype="float64")
+  y = np$array(data[["Y"]], dtype="float64")
+  z = np$array(data[["Z"]], dtype="float64")
+  list(timestamp = timestamp,
+       x = x,
+       y = y,
+       z = z,
+       orig_tz = orig_tz)
+}
+
 #' Preprocesses accelerometer bout to a common format.
 #'
 #' Resample 3-axial input signal to a predefined sampling rate and compute
@@ -45,6 +68,15 @@ process_vm_bout = function(vm_bout, tz, sample_rate = 10L) {
 #' @export
 #'
 #' @examples
+#' csv_file = system.file("test_data_bout.csv", package = "walking")
+#' if (requireNamespace("readr", quietly = TRUE)) {
+#'   x = readr::read_csv(csv_file)
+#'   colnames(x)[colnames(x) == "UTC time"] = "time"
+#'
+#'   res = preprocess_bout(data = x)
+#'   res2 = preprocess_bout_r(data = x)
+#'   testthat::expect_equal(res$vm_bout, res2$vm_bout, tolerance = 1e-4)
+#' }
 preprocess_bout = function(data, sample_rate = 10L) {
   assertthat::assert_that(
     assertthat::is.count(sample_rate)
@@ -52,30 +84,17 @@ preprocess_bout = function(data, sample_rate = 10L) {
   sample_rate = as.integer(sample_rate)
 
   oak = oak_base()
-  np = reticulate::import("numpy")
 
-  data = standardize_data(data, subset = TRUE)
-  stopifnot(
-    all(
-      c("HEADER_TIME_STAMP", "X", "Y", "Z") %in% colnames(data)
-    )
-  )
-
-  orig_tz = lubridate::tz(data$HEADER_TIME_STAMP)
-  data$HEADER_TIME_STAMP = as.numeric(data$HEADER_TIME_STAMP)
-  timestamp = np$array(data$HEADER_TIME_STAMP, dtype = "float64")
-  x = np$array(data[["X"]], dtype="float64")
-  y = np$array(data[["Y"]], dtype="float64")
-  z = np$array(data[["Z"]], dtype="float64")
+  py_data = pythonize_data(data)
   rm(data)
 
   vm_bout = oak$preprocess_bout(
-    t_bout = timestamp,
-    x_bout = x,
-    y_bout = y,
-    z_bout = z,
+    t_bout = py_data$timestamp,
+    x_bout = py_data$x,
+    y_bout = py_data$y,
+    z_bout = py_data$z,
     fs = sample_rate)
-  process_vm_bout(vm_bout, tz = orig_tz, sample_rate = sample_rate)
+  process_vm_bout(vm_bout, tz = py_data$orig_tz, sample_rate = sample_rate)
 }
 
 
@@ -92,20 +111,15 @@ preprocess_bout_r = function(data, sample_rate = 10L) {
   sp = reticulate::import("scipy")
   interpolate = sp$interpolate
 
-  data = standardize_data(data, subset = TRUE)
-  stopifnot(
-    all(
-      c("HEADER_TIME_STAMP", "X", "Y", "Z") %in% colnames(data)
-    )
-  )
-
-  orig_tz = lubridate::tz(data$HEADER_TIME_STAMP)
-  data$HEADER_TIME_STAMP = as.numeric(data$HEADER_TIME_STAMP)
-  t_bout = np$array(data$HEADER_TIME_STAMP, dtype = "float64")
-  x = np$array(data[["X"]], dtype="float64")
-  y = np$array(data[["Y"]], dtype="float64")
-  z = np$array(data[["Z"]], dtype="float64")
+  py_data = pythonize_data(data)
   rm(data)
+
+  t_bout = py_data$timestamp
+  x = py_data$x
+  y = py_data$y
+  z = py_data$z
+  orig_tz = py_data$orig_tz
+  rm(py_data)
   # xt_bout = t_bout
 
   t_bout_interp = t_bout - t_bout[1]
@@ -116,12 +130,16 @@ preprocess_bout_r = function(data, sample_rate = 10L) {
 
   f = interpolate$interp1d(t_bout, x)
   x_bout_interp = f(t_bout_interp)
+  rm(x)
 
   f = interpolate$interp1d(t_bout, y)
   y_bout_interp = f(t_bout_interp)
+  rm(y)
 
   f = interpolate$interp1d(t_bout, z)
   z_bout_interp = f(t_bout_interp)
+  rm(z)
+  rm(t_bout)
 
   # adjust bouts using designated function
   x_bout_interp = oak$adjust_bout(x_bout_interp)

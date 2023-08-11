@@ -27,7 +27,10 @@ rowWhichMaxs = function(x, tol = 1e-13) {
   all_rows = data.frame(row = 1:nrow(x))
   index = merge(all_rows, index, by = "row", all.x = TRUE)
   index = index[order(index[, "row"]), ]
-  index[, "col"]
+  res = tapply(index$col, index$row, min)
+  res = unname(res)
+  res = c(unlist(res))
+  # index[, "col"]
 }
 
 rowWhichMaxIndex = function(index_mat, value_mat, tol = 1e-13) {
@@ -178,6 +181,8 @@ create_peak_info = function(segments) {
 #' input_data <- matrix(runif(500 * 3, min = -1.5, max = 1.5), ncol = 3)
 #' verisense_count_steps(input_data, sample_rate = 15L)
 #' verisense_count_steps(input_data, sample_rate = 15L, peak_finder = "fast")
+#' acc = sqrt(rowSums(input_data^2))
+#' verisense_count_steps(acc, sample_rate = 15L, peak_finder = "fast")
 verisense_count_steps <- function(
     data,
     sample_rate,
@@ -267,7 +272,9 @@ verisense_count_steps <- function(
     no_steps <- TRUE
   }
 
-  if (nrow(peak_info) == 0 || no_steps == TRUE) {
+  if (nrow(peak_info) == 0 ||
+      nrow(peak_info) <= 2 || # can't calculate similarity
+      no_steps == TRUE) {
     # no steps found
     num_seconds <- round(n_samples / sample_rate)
     steps_per_sec <- rep(0, num_seconds)

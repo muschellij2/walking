@@ -26,3 +26,14 @@ creating the required times.
 Resample 3-axial input signal to a predefined sampling rate and compute
 vector magnitude.
 }
+\examples{
+csv_file = system.file("test_data_bout.csv", package = "walking")
+if (requireNamespace("readr", quietly = TRUE)) {
+  x = readr::read_csv(csv_file)
+  colnames(x)[colnames(x) == "UTC time"] = "time"
+
+  res = preprocess_bout(data = x)
+  res2 = preprocess_bout_r(data = x)
+  testthat::expect_equal(res$vm_bout, res2$vm_bout, tolerance = 1e-4)
+}
+}

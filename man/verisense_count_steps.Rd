@@ -57,4 +57,9 @@ in free living data.
 input_data <- matrix(runif(500 * 3, min = -1.5, max = 1.5), ncol = 3)
 verisense_count_steps(input_data, sample_rate = 15L)
 verisense_count_steps(input_data, sample_rate = 15L, peak_finder = "fast")
+acc = sqrt(rowSums(input_data^2))
+verisense_count_steps(acc, sample_rate = 15L, peak_finder = "fast")
+}
+\author{
+Matthew R Patterson \href{mailto:mpatterson@shimmersensing.com}{mpatterson@shimmersensing.com}
 }

@@ -25,3 +25,9 @@ Output of \link[reticulate:py_install]{reticulate::py_install}
 \description{
 Install the \code{forest} Python Module
 }
+\examples{
+if (have_forest()) {
+   forest_version()
+}
+
+}

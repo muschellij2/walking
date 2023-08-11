@@ -8,6 +8,11 @@
 #' @return Output of [reticulate::py_install]
 #' @export
 #' @rdname forest_setup
+#' @examples
+#' if (have_forest()) {
+#'    forest_version()
+#' }
+#'
 install_forest = function(ref = "develop", ...) {
   url = "https://github.com/onnela-lab/forest"
   url = paste0("git+", url)
