@@ -1,4 +1,4 @@
-test_that("verisense_count_steps peak_finder gives same", {
+testthat::test_that("verisense_count_steps peak_finder gives same", {
   input_data <- matrix(runif(500 * 3, min = -1.5, max = 1.5), ncol = 3)
   original = verisense_count_steps(input_data, sample_rate = 15L,
                                    peak_finder = "original")
@@ -8,7 +8,7 @@ test_that("verisense_count_steps peak_finder gives same", {
 })
 
 
-test_that("verisense_count_steps peak_finder gives same with CSV", {
+testthat::test_that("verisense_count_steps peak_finder gives same with CSV", {
   csv_file = system.file("test_data_bout.csv", package = "walking")
   testthat::skip_if_not_installed("readr")
   data = readr::read_csv(csv_file)
