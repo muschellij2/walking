@@ -26,4 +26,13 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
+      - uses: actions/setup-python@v4
+        if: matrix.config.python != 'debug'
+        with:
+          python-version: 3.9
+
+      - name: setup forest
+        run: |
+          pip install -y git+https://github.com/onnela-lab/forest@develop
+
       - uses: r-lib/actions/check-r-package@v2
