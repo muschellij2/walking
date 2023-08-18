@@ -69,12 +69,21 @@ run_resample = function(
 #' options(digits.secs = 3)
 #' csv_file = system.file("test_data_bout.csv", package = "walking")
 #' if (requireNamespace("readr", quietly = TRUE)) {
-#'   x = readr::read_csv(csv_file)
+#'   x = readr::read_csv(csv_file, guess_max = Inf)
 #'   colnames(x)[colnames(x) == "UTC time"] = "time"
 #'
 #'   res = resample_accel_data(data = x, sample_rate = 80)
 #'   res = resample_accel_data(data = x, sample_rate = 100)
 #'   res = resample_accel_data(data = x, sample_rate = 1)
+#'   res = resample_accel_data_to_time(
+#'     data = x,
+#'     times = lubridate::floor_date(x$time, unit = "1 sec"),
+#'   )
+#'   res_nat = resample_accel_data_to_time(
+#'     data = x,
+#'     times = lubridate::floor_date(x$time, unit = "1 sec"),
+#'     method = "natural"
+#'   )
 #' }
 resample_accel_data = function(
     data,
