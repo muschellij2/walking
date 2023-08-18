@@ -5,9 +5,9 @@
 \alias{resample_accel_data_to_time}
 \title{Resample 3-axial input signal to a specific sampling rate}
 \usage{
-resample_accel_data(data, sample_rate, ...)
+resample_accel_data(data, sample_rate, method = "linear", ...)
 
-resample_accel_data_to_time(data, times, ...)
+resample_accel_data_to_time(data, times, method = "linear", ...)
 }
 \arguments{
 \item{data}{A \code{data.frame} with a column for time in \code{POSIXct} (usually
@@ -16,7 +16,13 @@ resample_accel_data_to_time(data, times, ...)
 \item{sample_rate}{sampling frequency, coercible to an integer.
 This is the sampling rate you're sampling the data \emph{into}.}
 
-\item{...}{additional arguments to pass to \code{\link[stats:approxfun]{stats::approx()}}}
+\item{method}{method for interpolation. Options are
+\code{"linear"/"constant"}, which uses \code{stats::approx}, or one of
+\verb{"fmm", "periodic", "natural", "monoH.FC", "hyman"}, which uses
+\code{stats::spline}}
+
+\item{...}{additional arguments to pass to \code{\link[stats:approxfun]{stats::approx()}} or
+\link[stats:splinefun]{stats::spline}}
 
 \item{times}{a vector of \code{POSIXct} date/time values to interpolate
 the data to}

@@ -1,13 +1,37 @@
 run_resample = function(
-    timestamp, x, y, z, time_interp, orig_tz, ...) {
-  x_out = stats::approx(x = timestamp, y = x, xout = time_interp,
-                        ...)$y
+    timestamp, x, y, z,
+    time_interp,
+    orig_tz,
+    method = c("linear", "constant",
+               "fmm", "periodic", "natural", "monoH.FC", "hyman"),
+    ...) {
+  method = match.arg(method)
+  func = switch(
+    method,
+    linear = stats::approx,
+    constant = stats::approx,
+    fmm = stats::spline,
+    periodic = stats::spline,
+    natural = stats::spline,
+    monoH.FC = stats::spline,
+    hyman = stats::spline)
+  x_out = func(x = timestamp,
+               xout = time_interp,
+               method = method,
+               y = x,
+               ...)$y
   rm(x)
-  y_out = stats::approx(x = timestamp, y = y, xout = time_interp,
-                        ...)$y
+  y_out = func(x = timestamp,
+               xout = time_interp,
+               method = method,
+               y = y,
+               ...)$y
   rm(y)
-  z_out = stats::approx(x = timestamp, y = z, xout = time_interp,
-                        ...)$y
+  z_out = func(x = timestamp,
+               xout = time_interp,
+               method = method,
+               y = z,
+               ...)$y
   rm(z)
   rm(timestamp)
 
@@ -32,7 +56,12 @@ run_resample = function(
 #' `HEADER_TIME_STAMP`), and `X`, `Y`, `Z`
 #' @param sample_rate sampling frequency, coercible to an integer.
 #' This is the sampling rate you're sampling the data *into*.
-#' @param ... additional arguments to pass to [stats::approx()]
+#' @param ... additional arguments to pass to [stats::approx()] or
+#' [stats::spline]
+#' @param method method for interpolation. Options are
+#' `"linear"/"constant"`, which uses `stats::approx`, or one of
+#' `"fmm", "periodic", "natural", "monoH.FC", "hyman"`, which uses
+#' `stats::spline`
 #' @return A `data.frame`/`tibble` of `HEADER_TIME_STAMP` and `X`, `Y`, `Z`.
 #' @export
 #'
@@ -50,6 +79,7 @@ run_resample = function(
 resample_accel_data = function(
     data,
     sample_rate,
+    method = "linear",
     ...
 ) {
   assertthat::assert_that(
@@ -78,6 +108,7 @@ resample_accel_data = function(
     x = x,
     y = y,
     z = z,
+    method = method,
     time_interp = time_interp,
     orig_tz = orig_tz,
     ...)
@@ -94,6 +125,7 @@ resample_accel_data = function(
 resample_accel_data_to_time = function(
     data,
     times,
+    method = "linear",
     ...
 ) {
 
@@ -118,6 +150,7 @@ resample_accel_data_to_time = function(
     x = x,
     y = y,
     z = z,
+    method = method,
     time_interp = time_interp,
     orig_tz = orig_tz,
     ...)
