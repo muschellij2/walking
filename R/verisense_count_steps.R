@@ -331,6 +331,8 @@ verisense_count_steps <- function(
 
 
 #' @export
+#' @param ... not used, used to passes arguments from
+#' `verisense_count_steps_revised` to `verisense_count_steps`
 #' @rdname verisense_count_steps
 #' @note the `_revised` version is the same algorithm with different defaults
 #' for the parameters as based on <doi:10.3390/s22249984>.

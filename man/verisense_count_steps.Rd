@@ -54,6 +54,9 @@ called a peak}
 
 \item{peak_finder}{function to find peaks, either the "original"
 from the code, or the optimized "fast" version.}
+
+\item{...}{not used, used to passes arguments from
+\code{verisense_count_steps_revised} to \code{verisense_count_steps}}
 }
 \value{
 A vector of length \code{round(nrow(input_data) / sample_rate)} of the
