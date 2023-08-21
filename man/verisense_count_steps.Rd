@@ -2,6 +2,7 @@
 % Please edit documentation in R/verisense_count_steps.R
 \name{verisense_count_steps}
 \alias{verisense_count_steps}
+\alias{verisense_count_steps_revised}
 \title{Count Steps According to Gu et al, 2017 Method}
 \usage{
 verisense_count_steps(
@@ -11,10 +12,21 @@ verisense_count_steps(
   periodicity_range = c(5, 15),
   similarity_threshold = -0.5,
   continuity_window_size = 4,
-  continuity_threshold = 3,
+  continuity_threshold = 4,
   variance_threshold = 0.001,
   vm_threshold = 1.2,
   peak_finder = c("fast", "original")
+)
+
+verisense_count_steps_revised(
+  ...,
+  k = 4,
+  periodicity_range = c(4, 20),
+  similarity_threshold = -1,
+  continuity_window_size = 4,
+  continuity_threshold = 4,
+  variance_threshold = 0.01,
+  vm_threshold = 1.25
 )
 }
 \arguments{
@@ -52,6 +64,10 @@ This method is based off finding peaks in the summed and squared acceleration si
 and then using multiple thresholds to determine if each peak is a step or an artifact.
 An additional magnitude threshold was added to the algorithm to prevent false positives
 in free living data.
+}
+\note{
+the \verb{_revised} version is the same algorithm with different defaults
+for the parameters as based on \url{doi:10.3390/s22249984}.
 }
 \examples{
 input_data <- matrix(runif(500 * 3, min = -1.5, max = 1.5), ncol = 3)

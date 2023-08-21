@@ -190,7 +190,7 @@ verisense_count_steps <- function(
     periodicity_range = c(5, 15),
     similarity_threshold = -0.5,
     continuity_window_size = 4,
-    continuity_threshold = 3,
+    continuity_threshold = 4,
     variance_threshold = 0.001,
     vm_threshold = 1.2,
     peak_finder = c("fast", "original")
@@ -330,3 +330,28 @@ verisense_count_steps <- function(
 
 
 
+#' @export
+#' @rdname verisense_count_steps
+#' @note the `_revised` version is the same algorithm with different defaults
+#' for the parameters as based on <doi:10.3390/s22249984>.
+verisense_count_steps_revised <- function(
+    ...,
+    k = 4, # window size
+    periodicity_range = c(4, 20),
+    similarity_threshold = -1,
+    continuity_window_size = 4,
+    continuity_threshold = 4,
+    variance_threshold = 0.01,
+    vm_threshold = 1.25
+) {
+  verisense_count_steps(
+    ...,
+    k = k,
+    periodicity_range = periodicity_range,
+    similarity_threshold = similarity_threshold,
+    continuity_window_size = continuity_window_size,
+    continuity_threshold = continuity_threshold,
+    variance_threshold = variance_threshold,
+    vm_threshold = vm_threshold
+  )
+}
