@@ -178,6 +178,12 @@ create_peak_info = function(segments) {
 
 #'
 #' @examples
+#' csv_file = system.file("test_data_bout.csv", package = "walking")
+#' if (requireNamespace("readr", quietly = TRUE) && walking::have_forest()) {
+#'   x = readr::read_csv(csv_file)
+#'   colnames(x)[colnames(x) == "UTC time"] = "time"
+#'   out = verisense_count_steps(x, sample_rate = 10L)
+#' }
 #' input_data <- matrix(runif(500 * 3, min = -1.5, max = 1.5), ncol = 3)
 #' verisense_count_steps(input_data, sample_rate = 15L)
 #' verisense_count_steps(input_data, sample_rate = 15L, peak_finder = "fast")

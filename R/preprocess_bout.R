@@ -215,6 +215,11 @@ standardize_data = function(data, subset = TRUE) {
     data = data %>%
       dplyr::rename(HEADER_TIME_STAMP = HEADER_TIMESTAMP)
   }
+  if ("HEADER_TIME_STAMP" %in% colnames(data)) {
+    if (is.unsorted(data$HEADER_TIME_STAMP)) {
+      stop("Time in data must be sorted before running!")
+    }
+  }
   if (subset) {
     data = data %>%
       dplyr::select(dplyr::any_of("HEADER_TIME_STAMP"), X, Y, Z)
