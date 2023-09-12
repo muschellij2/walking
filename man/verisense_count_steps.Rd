@@ -15,7 +15,8 @@ verisense_count_steps(
   continuity_threshold = 4,
   variance_threshold = 0.001,
   vm_threshold = 1.2,
-  peak_finder = c("fast", "original")
+  peak_finder = c("fast", "original"),
+  verbose = TRUE
 )
 
 verisense_count_steps_revised(
@@ -54,6 +55,8 @@ called a peak}
 
 \item{peak_finder}{function to find peaks, either the "original"
 from the code, or the optimized "fast" version.}
+
+\item{verbose}{print diagnostic messages}
 
 \item{...}{not used, used to passes arguments from
 \code{verisense_count_steps_revised} to \code{verisense_count_steps}}

@@ -169,6 +169,7 @@ create_peak_info = function(segments) {
 #' called a peak
 #' @param peak_finder function to find peaks, either the "original"
 #' from the code, or the optimized "fast" version.
+#' @param verbose print diagnostic messages
 #'
 #' @return A vector of length `round(nrow(input_data) / sample_rate)` of the
 #' estimated steps, where the data is rounded to seconds
@@ -199,7 +200,8 @@ verisense_count_steps <- function(
     continuity_threshold = 4,
     variance_threshold = 0.001,
     vm_threshold = 1.2,
-    peak_finder = c("fast", "original")
+    peak_finder = c("fast", "original"),
+    verbose = TRUE
 ) {
 
   if (is.vector(data) && is.numeric(data)) {
@@ -253,6 +255,9 @@ verisense_count_steps <- function(
     original = find_peak_location,
     fast = find_peak_location_fast
   )
+  if (verbose) {
+    message("Finding Peak Locations")
+  }
   peak_info = peak_func(
     segments = segments,
     acc = acc,
@@ -263,7 +268,13 @@ verisense_count_steps <- function(
   peak_info <- peak_info[!is.na(peak_info[, "peak_location"]), ] # get rid of na rows
 
   # filter peak_info[,2] based on vm_threshold
+  if (verbose) {
+    message("Thresholding Peak by VM Threshold")
+  }
   peak_info <- peak_info[peak_info[, "acc_magnitude"] > vm_threshold, ]
+  if (verbose) {
+    message("Thresholding Peak by Periodicity")
+  }
   no_steps <- FALSE
   if (nrow(peak_info) > 2) { # there must be at least two steps
     num_peaks <- nrow(peak_info)
@@ -288,12 +299,18 @@ verisense_count_steps <- function(
   }
 
   # calculate similarity
+  if (verbose) {
+    message("Thresholding Peak by Similarity")
+  }
   num_peaks <- nrow(peak_info)
   peak_info[1:(num_peaks - 2), "similarity"] <- -abs(diff(peak_info[, "acc_magnitude"], 2)) # calculate similarity
   peak_info = peak_info[!is.na(peak_info$similarity), ]
   peak_info <- peak_info[peak_info[, "similarity"] > similarity_threshold, ] # filter based on sim_thres
 
   # calculate continuity
+  if (verbose) {
+    message("Thresholding Peak by Continuity")
+  }
   peak_info[, "continuity"] = 0
   if (nrow(peak_info) > 5) {
     end_for <- nrow(peak_info) - 1
