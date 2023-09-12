@@ -86,5 +86,6 @@ acc = sqrt(rowSums(input_data^2))
 verisense_count_steps(acc, sample_rate = 15L, peak_finder = "fast")
 }
 \author{
-Matthew R Patterson \href{mailto:mpatterson@shimmersensing.com}{mpatterson@shimmersensing.com}
+Matthew R Patterson \href{mailto:mpatterson@shimmersensing.com}{mpatterson@shimmersensing.com},
+MIT license, Copyright (c) 2020 Shimmer
 }
