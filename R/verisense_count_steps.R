@@ -174,8 +174,8 @@ create_peak_info = function(segments) {
 #' estimated steps, where the data is rounded to seconds
 #' @export
 #'
-#' @author Matthew R Patterson <mpatterson@shimmersensing.com>
-
+#' @author Matthew R Patterson <mpatterson@shimmersensing.com>,
+#' MIT license, Copyright (c) 2020 Shimmer
 #'
 #' @examples
 #' csv_file = system.file("test_data_bout.csv", package = "walking")

@@ -15,9 +15,9 @@
 #'   colnames(x)[colnames(x) == "UTC time"] = "time"
 #'   out = estimate_steps_forest(x, sample_rate = 10L)
 #'   out = estimate_steps_verisense(x, sample_rate = 10L,
-#'   method = "original")
+#'                                  method = "original")
 #'   out = estimate_steps_verisense(x, sample_rate = 10L,
-#'   method = "revised")
+#'                                  method = "revised")
 #' }
 estimate_steps_forest = function(data, ...) {
   find_walking(data, ...)
@@ -27,7 +27,10 @@ estimate_steps_forest = function(data, ...) {
 #' @param method Either using the original parameters [verisense_count_steps()]
 #' or the revised parameters [verisense_count_steps_revised()]
 #' @export
-estimate_steps_verisense = function(data, ..., method = c("original", "revised")) {
+estimate_steps_verisense = function(
+    data,
+    ...,
+    method = c("original", "revised")) {
   if (is.vector(data) && is.numeric(data)) {
     stop("estimate_steps_verisense needs a data set")
   }

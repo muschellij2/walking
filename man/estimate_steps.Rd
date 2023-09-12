@@ -31,8 +31,8 @@ if (requireNamespace("readr", quietly = TRUE) && walking::have_forest()) {
   colnames(x)[colnames(x) == "UTC time"] = "time"
   out = estimate_steps_forest(x, sample_rate = 10L)
   out = estimate_steps_verisense(x, sample_rate = 10L,
-  method = "original")
+                                 method = "original")
   out = estimate_steps_verisense(x, sample_rate = 10L,
-  method = "revised")
+                                 method = "revised")
 }
 }
