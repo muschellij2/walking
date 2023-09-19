@@ -170,6 +170,9 @@ create_peak_info = function(segments) {
 #' @param peak_finder function to find peaks, either the "original"
 #' from the code, or the optimized "fast" version.
 #' @param verbose print diagnostic messages
+#' @param global_vm_threshold Global acceleration VM threshold (in standard
+#' deviation) for the total vector.  If `sd(acc) < thresh` no steps are
+#' estimated.  Set to `0` to run estimation regardless.
 #'
 #' @return A vector of length `round(nrow(input_data) / sample_rate)` of the
 #' estimated steps, where the data is rounded to seconds
@@ -201,7 +204,8 @@ verisense_count_steps <- function(
     variance_threshold = 0.001,
     vm_threshold = 1.2,
     peak_finder = c("fast", "original"),
-    verbose = TRUE
+    verbose = TRUE,
+    global_vm_threshold = 0.025
 ) {
 
   if (is.vector(data) && is.numeric(data)) {
@@ -218,7 +222,7 @@ verisense_count_steps <- function(
   )
 
   n_samples = length(acc)
-  if (stats::sd(acc) < 0.025) {
+  if (stats::sd(acc) < global_vm_threshold) {
     # acceleration too low, no steps
     num_seconds <- round(n_samples / sample_rate)
     steps_per_sec <- rep(0, num_seconds)

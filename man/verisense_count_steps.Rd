@@ -16,7 +16,8 @@ verisense_count_steps(
   variance_threshold = 0.001,
   vm_threshold = 1.2,
   peak_finder = c("fast", "original"),
-  verbose = TRUE
+  verbose = TRUE,
+  global_vm_threshold = 0.025
 )
 
 verisense_count_steps_revised(
@@ -57,6 +58,10 @@ called a peak}
 from the code, or the optimized "fast" version.}
 
 \item{verbose}{print diagnostic messages}
+
+\item{global_vm_threshold}{Global acceleration VM threshold (in standard
+deviation) for the total vector.  If \code{sd(acc) < thresh} no steps are
+estimated.  Set to \code{0} to run estimation regardless.}
 
 \item{...}{not used, used to passes arguments from
 \code{verisense_count_steps_revised} to \code{verisense_count_steps}}
