@@ -44,6 +44,13 @@ estimate_steps_verisense = function(
     revised = verisense_count_steps_revised
   )
   res = func(data = data, ...)
+  n_seconds = length(seconds)
+  n_steps = length(res)
+  if (n_seconds - n_steps > 1) {
+    stop("Different number of rows for steps: ", n_steps,
+            " than time: ", n_seconds, ", time may be wrong!")
+  }
+  seconds = seconds[seq_along(res)]
   data.frame(
     time = seconds,
     steps = res
