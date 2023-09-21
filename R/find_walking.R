@@ -95,6 +95,8 @@ find_walking = function(
   vm_bout$steps = cadence_bout
   vm_bout$vm = NULL
   vm_bout = as.data.frame(vm_bout)
+  # need to remove 1D aspect
+  vm_bout$time = c(vm_bout$time)
 
   #
   # expected_output = np.array([1.65, 1.6, 1.55, 1.6, 1.55, 1.85, 1.8, 1.75,
