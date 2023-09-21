@@ -97,6 +97,7 @@ find_walking = function(
   vm_bout = as.data.frame(vm_bout)
   # need to remove 1D aspect
   vm_bout$time = c(vm_bout$time)
+  vm_bout$time = lubridate::floor_date(vm_bout$time, "seconds")
 
   #
   # expected_output = np.array([1.65, 1.6, 1.55, 1.6, 1.55, 1.85, 1.8, 1.75,
