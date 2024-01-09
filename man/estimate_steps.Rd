@@ -7,13 +7,21 @@
 \usage{
 estimate_steps_forest(data, ...)
 
-estimate_steps_verisense(data, ..., method = c("original", "revised"))
+estimate_steps_verisense(
+  data,
+  resample_to_15hz = FALSE,
+  ...,
+  method = c("original", "revised")
+)
 }
 \arguments{
 \item{data}{A \code{data.frame} with a column for time in \code{POSIXct} (usually
 \code{HEADER_TIMESTAMP}), and \code{X}, \code{Y}, \code{Z}}
 
 \item{...}{additional arguments to pass to specific method}
+
+\item{resample_to_15hz}{resample the data to 15Hz as \code{verisense} indicated
+that was the sample rate this was designed under.}
 
 \item{method}{Either using the original parameters \code{\link[=verisense_count_steps]{verisense_count_steps()}}
 or the revised parameters \code{\link[=verisense_count_steps_revised]{verisense_count_steps_revised()}}}

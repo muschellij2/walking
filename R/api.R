@@ -26,16 +26,34 @@ estimate_steps_forest = function(data, ...) {
 #' @rdname estimate_steps
 #' @param method Either using the original parameters [verisense_count_steps()]
 #' or the revised parameters [verisense_count_steps_revised()]
+#' @param resample_to_15hz resample the data to 15Hz as `verisense` indicated
+#' that was the sample rate this was designed under.
 #' @export
 estimate_steps_verisense = function(
     data,
+    resample_to_15hz = FALSE,
     ...,
     method = c("original", "revised")) {
   if (is.vector(data) && is.numeric(data)) {
-    stop("estimate_steps_verisense needs a data set")
+    stop("estimate_steps_verisense needs a data set/data.frame")
   }
 
+  assertthat::assert_that(
+    assertthat::is.flag(resample_to_15hz)
+  )
   data = standardize_data(data, subset = TRUE)
+  args = list(...)
+  if ("sample_rate" %in% names(args) &&
+      resample_to_15hz) {
+    warning("sample_rate will be ignored because resample_to_15hz is TRUE")
+  }
+  if (resample_to_15hz) {
+    data = resample_accel_data(
+      data = data,
+      sample_rate = 15L
+    )
+    args$sample_rate = 15L
+  }
   seconds = unique(lubridate::floor_date(data$HEADER_TIME_STAMP))
   method = match.arg(method)
   func = switch(
@@ -43,7 +61,8 @@ estimate_steps_verisense = function(
     original = verisense_count_steps,
     revised = verisense_count_steps_revised
   )
-  res = func(data = data, ...)
+  args$data = data
+  res = do.call(func, args = args)
   n_seconds = length(seconds)
   n_steps = length(res)
   if (n_seconds - n_steps > 1) {

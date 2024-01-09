@@ -13,12 +13,16 @@
 #'    forest_version()
 #' }
 #'
-install_forest = function(ref = "develop", ...) {
+install_forest = function(ref = "develop",
+                          ...
+) {
   url = "https://github.com/onnela-lab/forest"
   url = paste0("git+", url)
   ref = sub("^@", "", ref)
   url = paste0(url, "@", ref)
-  reticulate::py_install(url, pip = TRUE, ...)
+  reticulate::py_install(
+    url,
+    pip = TRUE, ...)
 }
 
 #' @export
