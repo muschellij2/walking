@@ -18,6 +18,8 @@ sdt_count_steps(
 \item{data}{A \code{data.frame} with a column for time in \code{POSIXct} (usually
 \code{HEADER_TIMESTAMP}), and \code{X}, \code{Y}, \code{Z}}
 
+\item{sample_rate}{sampling frequency (in Hz)}
+
 \item{order}{order of bandpass Butterworth filter order}
 
 \item{high}{highpass threshold for filter}
@@ -28,8 +30,6 @@ sdt_count_steps(
 threshold for peaks}
 
 \item{verbose}{print diagnostic messages}
-
-\item{sample_rate_analysis}{sampling frequency (in Hz)}
 }
 \value{
 A \code{data.frame} of \code{time}and \code{steps}

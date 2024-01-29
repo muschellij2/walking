@@ -2,7 +2,7 @@
 #'
 #' @param data A `data.frame` with a column for time in `POSIXct` (usually
 #' `HEADER_TIMESTAMP`), and `X`, `Y`, `Z`
-#' @param sample_rate_analysis sampling frequency (in Hz)
+#' @param sample_rate sampling frequency (in Hz)
 #' @param order order of bandpass Butterworth filter order
 #' @param high highpass threshold for filter
 #' @param low lowpass threshold for filter
@@ -30,8 +30,8 @@ sdt_count_steps <- function(
     verbose = TRUE
 ) {
 
-  HEADER_TIME_STAMP = vm = X = Y = Z = demean_vm = filt_vm = NULL
-  rm(list = c("vm", "X", "Y", "Z", "demean_vm", "filt_vm",
+  peak = HEADER_TIME_STAMP = vm = X = Y = Z = demean_vm = filt_vm = NULL
+  rm(list = c("vm", "X", "Y", "Z", "demean_vm", "filt_vm", "peak",
               "HEADER_TIME_STAMP"))
   location = match.arg(location, choices = c("wrist", "waist"))
   threshold = ifelse(location == "wrist", 0.0267, 0.0359)
