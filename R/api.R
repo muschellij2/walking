@@ -75,3 +75,9 @@ estimate_steps_verisense = function(
     steps = res
   )
 }
+
+#' @rdname estimate_steps
+#' @export
+estimate_steps_sdt = function(data, ...) {
+  sdt_count_steps(data, ...)
+}

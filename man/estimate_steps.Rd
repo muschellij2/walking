@@ -3,6 +3,7 @@
 \name{estimate_steps_forest}
 \alias{estimate_steps_forest}
 \alias{estimate_steps_verisense}
+\alias{estimate_steps_sdt}
 \title{Estimate Steps with Unified Syntax}
 \usage{
 estimate_steps_forest(data, ...)
@@ -13,6 +14,8 @@ estimate_steps_verisense(
   ...,
   method = c("original", "revised")
 )
+
+estimate_steps_sdt(data, ...)
 }
 \arguments{
 \item{data}{A \code{data.frame} with a column for time in \code{POSIXct} (usually
