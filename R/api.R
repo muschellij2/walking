@@ -1,7 +1,7 @@
 #' Estimate Steps with Unified Syntax
 #'
 #' @param data A `data.frame` with a column for time in `POSIXct` (usually
-#' `HEADER_TIME_STAMP`), and `X`, `Y`, `Z`
+#' `HEADER_TIMESTAMP`), and `X`, `Y`, `Z`
 #' @param ... additional arguments to pass to specific method
 #'
 #' @return A `data.frame` of seconds and steps
@@ -54,7 +54,7 @@ estimate_steps_verisense = function(
     )
     args$sample_rate = 15L
   }
-  seconds = unique(lubridate::floor_date(data$HEADER_TIME_STAMP))
+  seconds = unique(lubridate::floor_date(data$HEADER_TIMESTAMP))
   method = match.arg(method)
   func = switch(
     method,

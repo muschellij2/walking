@@ -34,13 +34,13 @@ pythonize_data = function(data) {
   data = standardize_data(data, subset = TRUE)
   stopifnot(
     all(
-      c("HEADER_TIME_STAMP", "X", "Y", "Z") %in% colnames(data)
+      c("HEADER_TIMESTAMP", "X", "Y", "Z") %in% colnames(data)
     )
   )
 
-  orig_tz = lubridate::tz(data$HEADER_TIME_STAMP)
-  data$HEADER_TIME_STAMP = as.numeric(data$HEADER_TIME_STAMP)
-  timestamp = np$array(data$HEADER_TIME_STAMP, dtype = "float64")
+  orig_tz = lubridate::tz(data$HEADER_TIMESTAMP)
+  data$HEADER_TIMESTAMP = as.numeric(data$HEADER_TIMESTAMP)
+  timestamp = np$array(data$HEADER_TIMESTAMP, dtype = "float64")
   x = np$array(data[["X"]], dtype="float64")
   y = np$array(data[["Y"]], dtype="float64")
   z = np$array(data[["Z"]], dtype="float64")
@@ -57,7 +57,7 @@ pythonize_data = function(data) {
 #' vector magnitude.
 #'
 #' @param data A `data.frame` with a column for time in `POSIXct` (usually
-#' `HEADER_TIME_STAMP`), and `X`, `Y`, `Z`
+#' `HEADER_TIMESTAMP`), and `X`, `Y`, `Z`
 #' @param sample_rate sampling frequency, coercible to an integer.
 #' This is the sampling rate you're sampling the data *into*.
 #'
@@ -181,58 +181,3 @@ preprocess_bout_r = function(data, sample_rate = 10L) {
 
 
 
-
-#' Standardize the Accelerometry Data
-#'
-#' @inheritParams preprocess_bout
-#' @param subset should only the `HEADER_TIME_STAMP` (if available)
-#' and `XYZ` be subset?
-#'
-#' @return A `data.frame` with `X/Y/Z` and a time in
-#' `HEADER_TIME_STAMP` (if available).
-#' @export
-standardize_data = function(data, subset = TRUE) {
-  HEADER_TIMESTAMP = TIME = HEADER_TIME_STAMP = X = Y = Z = NULL
-  rm(list = c("HEADER_TIMESTAMP", "HEADER_TIME_STAMP", "X", "Y", "Z",
-              "TIME"))
-  if (is.matrix(data)) {
-    if (is.numeric(data)) {
-      stopifnot(ncol(data) == 3)
-      data = as.data.frame(data)
-      colnames(data) = c("X", "Y", "Z")
-    } else {
-      stop("data is a matrix and cannot be coerced to necessary structure")
-    }
-  }
-  # uppercase
-  colnames(data) = toupper(colnames(data))
-  cn = colnames(data)
-  if ("TIME" %in% cn && !"HEADER_TIME_STAMP" %in% cn) {
-    data = data %>%
-      dplyr::rename(HEADER_TIME_STAMP = TIME)
-  }
-  if ("HEADER_TIMESTAMP" %in% cn && !"HEADER_TIME_STAMP" %in% cn) {
-    data = data %>%
-      dplyr::rename(HEADER_TIME_STAMP = HEADER_TIMESTAMP)
-  }
-  if ("HEADER_TIME_STAMP" %in% colnames(data)) {
-    if (is.unsorted(data$HEADER_TIME_STAMP)) {
-      stop("Time in data must be sorted before running!")
-    }
-  }
-  if (subset) {
-    data = data %>%
-      dplyr::select(dplyr::any_of("HEADER_TIME_STAMP"), X, Y, Z)
-  }
-  stopifnot(all(c("X", "Y", "Z") %in% colnames(data)))
-  data
-}
-
-#' @export
-#' @rdname standardize_data
-standardise_data = standardize_data
-
-xyz_data = function(data) {
-  data = standardize_data(data)
-  as.matrix(data[, c("X", "Y", "Z"), drop = FALSE])
-}

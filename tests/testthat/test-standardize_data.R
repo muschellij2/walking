@@ -32,12 +32,12 @@ testthat::test_that("standardize_data succeeds with resample_accel_data", {
   colnames(data)[colnames(data) == "UTC time"] = "time"
   out = walking::standardize_data(data)
 
-  testthat::expect_named(out, c("HEADER_TIME_STAMP", "X", "Y", "Z"))
+  testthat::expect_named(out, c("HEADER_TIMESTAMP", "X", "Y", "Z"))
   testthat::expect_true(nrow(out) == 98L)
 
   out = walking::resample_accel_data(data, sample_rate = 30L)
 
-  testthat::expect_named(out, c("HEADER_TIME_STAMP", "X", "Y", "Z"))
+  testthat::expect_named(out, c("HEADER_TIMESTAMP", "X", "Y", "Z"))
   testthat::expect_true(nrow(out) == 292L)
 
 })

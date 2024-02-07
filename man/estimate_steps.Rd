@@ -19,7 +19,7 @@ estimate_steps_sdt(data, ...)
 }
 \arguments{
 \item{data}{A \code{data.frame} with a column for time in \code{POSIXct} (usually
-\code{HEADER_TIME_STAMP}), and \code{X}, \code{Y}, \code{Z}}
+\code{HEADER_TIMESTAMP}), and \code{X}, \code{Y}, \code{Z}}
 
 \item{...}{additional arguments to pass to specific method}
 

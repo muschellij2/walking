@@ -11,7 +11,7 @@ resample_accel_data_to_time(data, times, method = "linear", ...)
 }
 \arguments{
 \item{data}{A \code{data.frame} with a column for time in \code{POSIXct} (usually
-\code{HEADER_TIME_STAMP}), and \code{X}, \code{Y}, \code{Z}}
+\code{HEADER_TIMESTAMP}), and \code{X}, \code{Y}, \code{Z}}
 
 \item{sample_rate}{sampling frequency, coercible to an integer.
 This is the sampling rate you're sampling the data \emph{into}.}
@@ -28,7 +28,7 @@ This is the sampling rate you're sampling the data \emph{into}.}
 the data to}
 }
 \value{
-A \code{data.frame}/\code{tibble} of \code{HEADER_TIME_STAMP} and \code{X}, \code{Y}, \code{Z}.
+A \code{data.frame}/\code{tibble} of \code{HEADER_TIMESTAMP} and \code{X}, \code{Y}, \code{Z}.
 }
 \description{
 Resample 3-axial input signal to a specific sampling rate

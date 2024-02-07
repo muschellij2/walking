@@ -43,17 +43,19 @@ run_resample = function(
     origin = lubridate::origin)
 
   out = data.frame(
-    HEADER_TIME_STAMP = time_interp,
+    HEADER_TIMESTAMP = time_interp,
     X = x_out,
     Y = y_out,
     Z = z_out
   )
+  # this should allow us to match whatever standardize_data does
+  out = standardize_data(data = out, subset = FALSE)
   out
 }
 #' Resample 3-axial input signal to a specific sampling rate
 #'
 #' @param data A `data.frame` with a column for time in `POSIXct` (usually
-#' `HEADER_TIME_STAMP`), and `X`, `Y`, `Z`
+#' `HEADER_TIMESTAMP`), and `X`, `Y`, `Z`
 #' @param sample_rate sampling frequency, coercible to an integer.
 #' This is the sampling rate you're sampling the data *into*.
 #' @param ... additional arguments to pass to [stats::approx()] or
@@ -62,7 +64,7 @@ run_resample = function(
 #' `"linear"/"constant"`, which uses `stats::approx`, or one of
 #' `"fmm", "periodic", "natural", "monoH.FC", "hyman"`, which uses
 #' `stats::spline`
-#' @return A `data.frame`/`tibble` of `HEADER_TIME_STAMP` and `X`, `Y`, `Z`.
+#' @return A `data.frame`/`tibble` of `HEADER_TIMESTAMP` and `X`, `Y`, `Z`.
 #' @export
 #'
 #' @examples
@@ -97,8 +99,8 @@ resample_accel_data = function(
   sample_rate = as.integer(sample_rate)
 
   data = standardize_data(data)
-  orig_tz = lubridate::tz(data$HEADER_TIME_STAMP)
-  timestamp = as.numeric(data$HEADER_TIME_STAMP)
+  orig_tz = lubridate::tz(data$HEADER_TIMESTAMP)
+  timestamp = as.numeric(data$HEADER_TIMESTAMP)
   x = data[["X"]]
   y = data[["Y"]]
   z = data[["Z"]]
@@ -139,12 +141,12 @@ resample_accel_data_to_time = function(
 ) {
 
   data = standardize_data(data)
-  orig_tz = lubridate::tz(data$HEADER_TIME_STAMP)
+  orig_tz = lubridate::tz(data$HEADER_TIMESTAMP)
   time_tz = lubridate::tz(times)
   if (orig_tz != time_tz) {
     stop("Timezone in data times do not match timezone in time vector!")
   }
-  timestamp = as.numeric(data$HEADER_TIME_STAMP)
+  timestamp = as.numeric(data$HEADER_TIMESTAMP)
   x = data[["X"]]
   y = data[["Y"]]
   z = data[["Z"]]

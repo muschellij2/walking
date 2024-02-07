@@ -1,7 +1,7 @@
 #' Estimate Steps via SDT
 #'
 #' @param data A `data.frame` with a column for time in `POSIXct` (usually
-#' `HEADER_TIME_STAMP`), and `X`, `Y`, `Z`
+#' `HEADER_TIMESTAMP`), and `X`, `Y`, `Z`
 #' @param sample_rate sampling frequency (in Hz)
 #' @param order order of bandpass Butterworth filter order
 #' @param high highpass threshold for filter
@@ -30,9 +30,9 @@ sdt_count_steps <- function(
     verbose = TRUE
 ) {
 
-  peak = HEADER_TIME_STAMP = vm = X = Y = Z = demean_vm = filt_vm = NULL
+  peak = HEADER_TIMESTAMP = vm = X = Y = Z = demean_vm = filt_vm = NULL
   rm(list = c("vm", "X", "Y", "Z", "demean_vm", "filt_vm", "peak",
-              "HEADER_TIME_STAMP"))
+              "HEADER_TIMESTAMP"))
   location = match.arg(location, choices = c("wrist", "waist"))
   threshold = ifelse(location == "wrist", 0.0267, 0.0359)
 
@@ -71,7 +71,7 @@ sdt_count_steps <- function(
     message("sdt completed")
   }
   data %>%
-    dplyr::group_by(time = lubridate::floor_date(HEADER_TIME_STAMP)) %>%
+    dplyr::group_by(time = lubridate::floor_date(HEADER_TIMESTAMP)) %>%
     dplyr::summarize(steps = sum(peak, na.rm = TRUE))
 
 }

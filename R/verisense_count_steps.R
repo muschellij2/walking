@@ -155,7 +155,7 @@ create_peak_info = function(segments) {
 #' in free living data.
 #'
 #' @param data A `data.frame` with a column for time in `POSIXct` (usually
-#' `HEADER_TIME_STAMP`, not required), and `X`, `Y`, `Z`
+#' `HEADER_TIMESTAMP`, not required), and `X`, `Y`, `Z`
 #' @param sample_rate sampling frequency of the input data
 #' @param k window size for controlling peak finding.
 #' @param periodicity_range a length-2 vector of the range of periodicity.

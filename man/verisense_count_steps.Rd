@@ -33,7 +33,7 @@ verisense_count_steps_revised(
 }
 \arguments{
 \item{data}{A \code{data.frame} with a column for time in \code{POSIXct} (usually
-\code{HEADER_TIME_STAMP}, not required), and \code{X}, \code{Y}, \code{Z}}
+\code{HEADER_TIMESTAMP}, not required), and \code{X}, \code{Y}, \code{Z}}
 
 \item{sample_rate}{sampling frequency of the input data}
 

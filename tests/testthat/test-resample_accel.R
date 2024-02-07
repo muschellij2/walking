@@ -6,6 +6,7 @@ testthat::test_that("resample_accel_data gives fixed answer", {
   colnames(data)[colnames(data) == "UTC time"] = "time"
   data = standardize_data(data)
   new_data = resample_accel_data(data, sample_rate = 5)
+  testthat::expect_named(new_data, c("HEADER_TIMESTAMP", "X", "Y", "Z"))
 
 
   suppressWarnings({out = find_walking(new_data, sample_rate_analysis = 10L)})
@@ -24,9 +25,11 @@ testthat::test_that("resample_accel_data gives fixed answer", {
                                  method = "linear",
                                  rule = 2)
   remade_data = resample_accel_data_to_time(new_data,
-                                            times = data$HEADER_TIME_STAMP,
+                                            times = data$HEADER_TIMESTAMP,
                                             method = "linear",
                                             rule = 2)
+  testthat::expect_named(remade_data, c("HEADER_TIMESTAMP", "X", "Y", "Z"))
+
   stopifnot(all(dim(remade_data) == dim(data)))
   # some are NA because the times are outside scope
   na_x = is.na(remade_data$X)
