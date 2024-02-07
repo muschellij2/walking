@@ -43,7 +43,7 @@ run_resample = function(
     origin = lubridate::origin)
 
   out = data.frame(
-    HEADER_TIMESTAMP = time_interp,
+    HEADER_TIME_STAMP = time_interp,
     X = x_out,
     Y = y_out,
     Z = z_out

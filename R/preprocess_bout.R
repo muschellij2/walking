@@ -57,7 +57,7 @@ pythonize_data = function(data) {
 #' vector magnitude.
 #'
 #' @param data A `data.frame` with a column for time in `POSIXct` (usually
-#' `HEADER_TIMESTAMP`), and `X`, `Y`, `Z`
+#' `HEADER_TIME_STAMP`), and `X`, `Y`, `Z`
 #' @param sample_rate sampling frequency, coercible to an integer.
 #' This is the sampling rate you're sampling the data *into*.
 #'

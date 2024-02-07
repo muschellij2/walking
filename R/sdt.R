@@ -1,7 +1,7 @@
 #' Estimate Steps via SDT
 #'
 #' @param data A `data.frame` with a column for time in `POSIXct` (usually
-#' `HEADER_TIMESTAMP`), and `X`, `Y`, `Z`
+#' `HEADER_TIME_STAMP`), and `X`, `Y`, `Z`
 #' @param sample_rate sampling frequency (in Hz)
 #' @param order order of bandpass Butterworth filter order
 #' @param high highpass threshold for filter

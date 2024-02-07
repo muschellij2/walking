@@ -11,7 +11,7 @@ preprocess_bout_r(data, sample_rate = 10L)
 }
 \arguments{
 \item{data}{A \code{data.frame} with a column for time in \code{POSIXct} (usually
-\code{HEADER_TIMESTAMP}), and \code{X}, \code{Y}, \code{Z}}
+\code{HEADER_TIME_STAMP}), and \code{X}, \code{Y}, \code{Z}}
 
 \item{sample_rate}{sampling frequency, coercible to an integer.
 This is the sampling rate you're sampling the data \emph{into}.}

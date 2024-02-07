@@ -16,7 +16,7 @@ sdt_count_steps(
 }
 \arguments{
 \item{data}{A \code{data.frame} with a column for time in \code{POSIXct} (usually
-\code{HEADER_TIMESTAMP}), and \code{X}, \code{Y}, \code{Z}}
+\code{HEADER_TIME_STAMP}), and \code{X}, \code{Y}, \code{Z}}
 
 \item{sample_rate}{sampling frequency (in Hz)}
 

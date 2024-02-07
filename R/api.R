@@ -1,7 +1,7 @@
 #' Estimate Steps with Unified Syntax
 #'
 #' @param data A `data.frame` with a column for time in `POSIXct` (usually
-#' `HEADER_TIMESTAMP`), and `X`, `Y`, `Z`
+#' `HEADER_TIME_STAMP`), and `X`, `Y`, `Z`
 #' @param ... additional arguments to pass to specific method
 #'
 #' @return A `data.frame` of seconds and steps

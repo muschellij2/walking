@@ -11,7 +11,7 @@ standardise_data(data, subset = TRUE)
 }
 \arguments{
 \item{data}{A \code{data.frame} with a column for time in \code{POSIXct} (usually
-\code{HEADER_TIMESTAMP}), and \code{X}, \code{Y}, \code{Z}}
+\code{HEADER_TIME_STAMP}), and \code{X}, \code{Y}, \code{Z}}
 
 \item{subset}{should only the \code{HEADER_TIME_STAMP} (if available)
 and \code{XYZ} be subset?}
