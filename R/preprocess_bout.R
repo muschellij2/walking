@@ -29,6 +29,8 @@ process_vm_bout = function(vm_bout, tz, sample_rate = 10L) {
 }
 
 pythonize_data = function(data) {
+  HEADER_TIMESTAMP = NULL
+  rm(list = "HEADER_TIMESTAMP")
   np = reticulate::import("numpy")
 
   data = standardize_data(data, subset = TRUE)
@@ -40,6 +42,8 @@ pythonize_data = function(data) {
 
   orig_tz = lubridate::tz(data$HEADER_TIMESTAMP)
   data$HEADER_TIMESTAMP = as.numeric(data$HEADER_TIMESTAMP)
+  data = data %>%
+    dplyr::arrange(HEADER_TIMESTAMP)
   timestamp = np$array(data$HEADER_TIMESTAMP, dtype = "float64")
   x = np$array(data[["X"]], dtype="float64")
   y = np$array(data[["Y"]], dtype="float64")
@@ -124,8 +128,10 @@ preprocess_bout_r = function(data, sample_rate = 10L) {
   # xt_bout = t_bout
 
   t_bout_interp = t_bout - t_bout[1]
+  # endpoint = max(t_bout_interp)
   t_bout_interp = np$arange(t_bout_interp[1],
-                            t_bout_interp[length(t_bout_interp)],
+                            np$max(t_bout_interp),
+                            # t_bout_interp[length(t_bout_interp)],
                             (1/sample_rate))
   t_bout_interp = t_bout_interp + t_bout[1]
 
