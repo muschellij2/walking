@@ -127,13 +127,14 @@ preprocess_bout_r = function(data, sample_rate = 10L) {
   rm(py_data)
   # xt_bout = t_bout
 
-  t_bout_interp = t_bout - t_bout[1]
+  t0 = np$min(t_bout)
+  t_bout_interp = t_bout - t0
   # endpoint = max(t_bout_interp)
-  t_bout_interp = np$arange(t_bout_interp[1],
+  t_bout_interp = np$arange(np$min(t_bout_interp),
                             np$max(t_bout_interp),
                             # t_bout_interp[length(t_bout_interp)],
                             (1/sample_rate))
-  t_bout_interp = t_bout_interp + t_bout[1]
+  t_bout_interp = t_bout_interp + t0
 
   f = interpolate$interp1d(t_bout, x)
   x_bout_interp = f(t_bout_interp)
