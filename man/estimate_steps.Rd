@@ -40,7 +40,7 @@ csv_file = system.file("test_data_bout.csv", package = "walking")
 if (requireNamespace("readr", quietly = TRUE) && walking::have_forest()) {
   x = readr::read_csv(csv_file)
   colnames(x)[colnames(x) == "UTC time"] = "time"
-  out = estimate_steps_forest(x, sample_rate = 10L)
+  out = estimate_steps_forest(x, sample_rate_analysis = 10L)
   out = estimate_steps_verisense(x, sample_rate = 10L,
                                  method = "original")
   out = estimate_steps_verisense(x, sample_rate = 10L,

@@ -42,3 +42,8 @@ colnames(x)[colnames(x) == "UTC time"] = "time"
 res = find_walking(data = x)
 print(res)
 ```
+
+## Potential Conflicts
+
+### Running `forest` and [`stepcount`](https://github.com/jhuwit/stepcount). 
+The two Python modules (`forest` and `stepcount`) may not be installed in the same `conda` environment, which leads to an error message if you run them in the same R session. The easiest solution is to run them in two separate R sessions. Alternatively, you can install `forest` in the `stepcount` conda environment. 
