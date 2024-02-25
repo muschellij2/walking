@@ -56,3 +56,8 @@ print(res)
 #> 9  2020-02-25 18:18:39  1.75
 #> 10 2020-02-25 18:18:40  1.70
 ```
+
+## Common Error
+
+### Running `forest` and [`stepcount`](https://github.com/jhuwit/stepcount). 
+The two python modules are usually not installed in the same conda environment, which leads to an error message if you run them in the same R session. The easiest solution is to run them in two separate R sessions. Alternatively, you can install `forest` in the `stepcount` conda environment. 
