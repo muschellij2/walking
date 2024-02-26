@@ -4,6 +4,8 @@
 \alias{install_forest}
 \alias{have_forest}
 \alias{forest_version}
+\alias{forest_version_pip}
+\alias{forest_requirement}
 \title{Install the \code{forest} Python Module}
 \usage{
 install_forest(ref = "develop", ...)
@@ -11,6 +13,10 @@ install_forest(ref = "develop", ...)
 have_forest()
 
 forest_version()
+
+forest_version_pip()
+
+forest_requirement()
 }
 \arguments{
 \item{ref}{Git reference to install, default is \code{main}.  Use \code{develop} for
@@ -28,6 +34,7 @@ Install the \code{forest} Python Module
 \examples{
 if (have_forest()) {
    forest_version()
+   forest_version_pip()
 }
 
 }
