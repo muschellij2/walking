@@ -61,8 +61,40 @@ print(res)
 
 ### Running `forest` and [`stepcount`](https://github.com/jhuwit/stepcount).
 
-The two Python modules (`forest` and `stepcount`) may not be installed
-in the same `conda` environment, which leads to an error message if you
-run them in the same R session. The easiest solution is to run them in
-two separate R sessions. Alternatively, you can install `forest` in the
-`stepcount` conda environment.
+The two Python modules (`forest` and `stepcount`) can be be installed in
+the same `conda` environment, but if they are not, this will lead to an
+error message. The options. One solution is to run them in two separate
+R sessions (recommended).
+
+Alternatively, you can try to install `forest` in the `stepcount` conda
+environment, such as:
+
+``` r
+envname = "stepcount2"
+stepcount::conda_create_stepcount(envname = envname)
+# if you have RETICULATE_PYTHON set
+stepcount::unset_reticulate_python()
+stepcount::use_stepcount_condaenv(envname = envname)
+walking::install_forest(envname = envname)
+```
+
+and then run examples such as:
+
+``` r
+library(walking)
+library(stepcount)
+envname = "stepcount2"
+
+# if you have RETICULATE_PYTHON set
+stepcount::unset_reticulate_python()
+stepcount::use_stepcount_condaenv(envname = envname)
+
+csv_file = system.file("test_data_bout.csv", package = "walking")
+x = readr::read_csv(csv_file)
+colnames(x)[colnames(x) == "UTC time"] = "time"
+res = find_walking(data = x)
+```
+
+Remember, however, best practices for Python is “Always create a
+separate virtual environment for each project” and sometimes one for
+each “goal”.
