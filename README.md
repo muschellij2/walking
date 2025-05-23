@@ -75,7 +75,6 @@ stepcount::conda_create_stepcount(envname = envname)
 # if you have RETICULATE_PYTHON set
 stepcount::unset_reticulate_python()
 stepcount::use_stepcount_condaenv(envname = envname)
-walking::install_forest(envname = envname)
 ```
 
 and then run examples such as:

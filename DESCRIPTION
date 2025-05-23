@@ -20,7 +20,7 @@ Imports:
     lubridate,
     magrittr,
     matrixStats,
-    reticulate (>= 1.4.1),
+    reticulate (>= 1.42.0),
     signal,
     tidyr
 Suggests: 
