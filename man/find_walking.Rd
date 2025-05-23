@@ -51,7 +51,7 @@ Frequency components are extracted with Continuous Wavelet Transform.
 }
 \examples{
 csv_file = system.file("test_data_bout.csv", package = "walking")
-if (requireNamespace("readr", quietly = TRUE) && walking::have_forest()) {
+if (requireNamespace("readr", quietly = TRUE)) {
   x = readr::read_csv(csv_file)
   colnames(x)[colnames(x) == "UTC time"] = "time"
   res = find_walking(data = x)

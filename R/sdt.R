@@ -34,7 +34,8 @@ sdt_count_steps <- function(
   rm(list = c("vm", "X", "Y", "Z", "demean_vm", "filt_vm", "peak",
               "HEADER_TIMESTAMP"))
   location = match.arg(location, choices = c("wrist", "waist"))
-  threshold = ifelse(location == "wrist", 0.0267, 0.0359)
+  # fixed thresholds for wrist and waist May23, 2025
+  threshold = ifelse(location == "wrist", 0.0359, 0.0267)
 
   data = standardize_data(data, subset = TRUE)
   assertthat::assert_that(

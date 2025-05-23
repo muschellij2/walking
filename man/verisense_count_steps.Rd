@@ -82,7 +82,7 @@ for the parameters as based on \url{doi:10.3390/s22249984}.
 }
 \examples{
 csv_file = system.file("test_data_bout.csv", package = "walking")
-if (requireNamespace("readr", quietly = TRUE) && walking::have_forest()) {
+if (requireNamespace("readr", quietly = TRUE)) {
   x = readr::read_csv(csv_file)
   colnames(x)[colnames(x) == "UTC time"] = "time"
   out = verisense_count_steps(x, sample_rate = 10L)

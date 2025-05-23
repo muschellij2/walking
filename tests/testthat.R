@@ -9,4 +9,9 @@
 library(testthat)
 library(walking)
 
+# if (walking::have_walking_condaenv()) {
+#   walking::unset_reticulate_python()
+#   walking::use_walking_condaenv()
+# }
+
 test_check("walking")
