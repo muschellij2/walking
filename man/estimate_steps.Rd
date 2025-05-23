@@ -37,7 +37,7 @@ Estimate Steps with Unified Syntax
 }
 \examples{
 csv_file = system.file("test_data_bout.csv", package = "walking")
-if (requireNamespace("readr", quietly = TRUE) && walking::have_forest()) {
+if (requireNamespace("readr", quietly = TRUE)) {
   x = readr::read_csv(csv_file)
   colnames(x)[colnames(x) == "UTC time"] = "time"
   out = estimate_steps_forest(x, sample_rate_analysis = 10L)

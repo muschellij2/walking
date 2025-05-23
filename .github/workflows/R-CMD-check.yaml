@@ -29,10 +29,10 @@ jobs:
       - uses: actions/setup-python@v4
         if: matrix.config.python != 'debug'
         with:
-          python-version: 3.9
+          python-version: 3.11
 
-      - name: setup forest
-        run: |
-          pip install git+https://github.com/onnela-lab/forest@develop
+      # - name: setup forest
+      #   run: |
+      #     pip install git+https://github.com/onnela-lab/forest@45fb41038bd46c25d9e6a4442aa74fa03b501317
 
       - uses: r-lib/actions/check-r-package@v2
