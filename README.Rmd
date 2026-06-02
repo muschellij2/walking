@@ -11,6 +11,9 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
+reticulate::py_require(
+  "git+https://github.com/onnela-lab/forest@45fb41038bd46c25d9e6a4442aa74fa03b501317", 
+  python_version = "3.11")
 ```
 
 # walking
@@ -33,10 +36,13 @@ devtools::install_github("muschellij2/walking")
 `walking` no longer tries to install `forest` for you. Install `forest` in
 your own Python environment first, then load `walking` from R.
 
-If you hit the LLVM mismatch described in
+If you hit `clang++: error: unsupported option '-fopenmp'` or the LLVM
+mismatch described in
 [onnela-lab/forest#293](https://github.com/onnela-lab/forest/issues/293) and
 [numba/llvmlite#1389](https://github.com/numba/llvmlite/issues/1389), use a
-Python environment where `forest` and its dependencies already resolve cleanly.
+Python environment where `forest` and its dependencies already resolve cleanly,
+then point `reticulate` at that environment with `use_condaenv()` or
+`use_python()`.
 
 ## Example
 
@@ -54,33 +60,56 @@ print(res)
 ## Potential Conflicts
 
 ### Running `forest` and [`stepcount`](https://github.com/jhuwit/stepcount). 
-The two Python modules (`forest` and `stepcount`) can be be installed in the same `conda` environment, but if they are not, this will lead to an error message.  The options.  One solution is to run them in two separate R sessions (recommended). 
+The two Python modules (`forest` and `stepcount`) can have different conflicts of python dependencies and python versions.  You can do specific call-outs with `callr` to try to resolve this:
 
-Alternatively, you can try to install `forest` in the `stepcount` conda environment, such as:
+## Running Walking with Different Python Environments
 
-```{r, eval = FALSE}
-envname = "stepcount2"
-stepcount::conda_create_stepcount(envname = envname)
-# if you have RETICULATE_PYTHON set
-stepcount::unset_reticulate_python()
-stepcount::use_stepcount_condaenv(envname = envname)
-```
+If you want to use both walking estimation from `forest` and `stepcount`, you can run them in separate R processes using `callr` to avoid Python package conflicts. 
+Here's how you can do it:
 
-and then run examples such as:
-
-```{r, eval = FALSE}
-library(walking)
+```{r, cache = TRUE}
+library(callr)
 library(stepcount)
-envname = "stepcount2"
-
-# if you have RETICULATE_PYTHON set
-stepcount::unset_reticulate_python()
-stepcount::use_stepcount_condaenv(envname = envname)
-
 csv_file = system.file("test_data_bout.csv", package = "walking")
-x = readr::read_csv(csv_file)
-colnames(x)[colnames(x) == "UTC time"] = "time"
-res = find_walking(data = x)
-```
+data = readr::read_csv(csv_file)
+colnames(data)[colnames(data) == "UTC time"] = "time"
 
-Remember, however, best practices for Python is "Always create a separate virtual environment for each project" and sometimes one for each "goal".
+stepcount_callr = function(data,
+                           ...) {
+  
+  reticulate::py_require("stepcount==3.11.0", python_version = "3.10")
+  sc <- reticulate::import("stepcount")
+  stepcount::stepcount_check()
+  
+  res = stepcount::stepcount(data, ...)
+  return(res)
+}
+
+# 2. Run the isolated background R process
+result <- callr::r(
+  func = stepcount_callr,
+  show = TRUE,
+  args = list(data = data) # Safely injects data into the process
+)
+head(result)
+
+forest_callr = function(data,
+                        ...) {
+  reticulate::py_require(
+    "git+https://github.com/onnela-lab/forest@45fb41038bd46c25d9e6a4442aa74fa03b501317", 
+    python_version = "3.11")
+  fr = reticulate::import("forest")
+  oak = fr$oak$base
+  oak
+  res = walking::estimate_steps_forest(data, ...)
+  return(res)
+}
+
+# 2. Run the isolated background R process
+fresult <- callr::r(
+  func = forest_callr,
+  show = TRUE,
+  args = list(data = data) # Safely injects data into the process
+)
+head(fresult)
+```
