@@ -69,7 +69,9 @@ find_walking = function(
   if (verbose) {
     message("Bout is Preprocessed")
   }
-  vm_bout = pp_out$vm_bout$vm
+  vm_bout = pp_out$vm_bout
+  vm = vm_bout$vm
+  vm_bout$vm = NULL
   # step_frequency = do.call(reticulate::tuple, as.list(step_frequency))
 
   oak = oak_base()
@@ -80,7 +82,7 @@ find_walking = function(
   #            fs = sample_rate)
 
   cadence_bout = oak$find_walking(
-    vm_bout = vm_bout,
+    vm_bout = vm,
     fs = sample_rate_analysis,
     min_amp = min_amplitude,
     step_freq = step_frequency,
@@ -91,9 +93,8 @@ find_walking = function(
   if (verbose) {
     message("OAK: Find walking is done")
   }
-  vm_bout = pp_out$vm_bout
+
   vm_bout$steps = cadence_bout
-  vm_bout$vm = NULL
   vm_bout = as.data.frame(vm_bout)
   # need to remove 1D aspect
   vm_bout$time = c(vm_bout$time)

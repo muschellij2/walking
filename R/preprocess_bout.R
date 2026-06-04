@@ -180,11 +180,17 @@ preprocess_bout_r = function(data, sample_rate = 10L) {
   vm_bout_interp = np$sqrt(x_bout_interp**2 +
                              y_bout_interp**2 +
                              z_bout_interp**2) - 1
+  rm(x_bout_interp)
+  rm(y_bout_interp)
+  rm(z_bout_interp)
 
   vm_bout = list(
     t_bout_interp,
     vm_bout_interp
   )
+  rm(vm_bout_interp)
+  rm(t_bout_interp)
+
   process_vm_bout(vm_bout, tz = orig_tz, sample_rate = sample_rate)
 }
 
