@@ -3,6 +3,10 @@ oak_base = function() {
     stop(
       "Python package 'forest' is not installed in the active reticulate environment. ",
       "Install it yourself before calling walking functions that use forest.\n",
+      "If installation fails with \"clang++: error: unsupported option '-fopenmp'\", ",
+      "that is a Python toolchain/OpenMP problem, not a walking problem.\n",
+      "Use a Python environment where forest and numba/llvmlite already resolve cleanly, ",
+      "then point reticulate at that environment.\n",
       "See https://github.com/onnela-lab/forest/issues/293 and ",
       "https://github.com/numba/llvmlite/issues/1389."
     )
