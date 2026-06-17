@@ -70,6 +70,8 @@ find_walking = function(
     message("Bout is Preprocessed")
   }
   vm_bout = pp_out$vm_bout
+  rm(pp_out)
+
   vm = vm_bout$vm
   vm_bout$vm = NULL
   # step_frequency = do.call(reticulate::tuple, as.list(step_frequency))
@@ -93,6 +95,7 @@ find_walking = function(
   if (verbose) {
     message("OAK: Find walking is done")
   }
+  rm(vm)
 
   vm_bout$steps = cadence_bout
   vm_bout = as.data.frame(vm_bout)
