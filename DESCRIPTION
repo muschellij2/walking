@@ -1,15 +1,16 @@
 Package: walking
-Title: Segments Accelerometry Data into Walking using the Python `forest` Module
-Version: 0.6.1
+Title: Segments Accelerometry Data into Walking Bouts using Open Source Methods
+Version: 0.7.0
 Authors@R: 
     person(given = "John",
            family = "Muschelli",
            role = c("aut", "cre"),
            email = "muschellij2@gmail.com",
            comment = c(ORCID = "0000-0001-6469-1750"))
-Description: Interfaces the `forest` Python 
-    module <https://github.com/onnela-lab/forest> to segment
-    walking and other activities from accelerometry data.
+Description: Segments walking from accelerometry data using 'forest' Python 
+    module <https://github.com/onnela-lab/forest>, 'Verisense' (original and revised)
+    <doi:10.1080/02640414.2022.2147134>, and Step Detection Threshold ('SDT') 
+    <doi:10.1123/jmpb.2021-0011> methods.
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -27,6 +28,4 @@ Suggests:
     readr,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-Remotes:
-  jhuwit/actibase
 Config/roxygen2/version: 8.0.0

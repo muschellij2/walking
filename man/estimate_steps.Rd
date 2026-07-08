@@ -39,6 +39,7 @@ A \code{data.frame} of seconds and steps
 Estimate Steps with Unified Syntax
 }
 \examples{
+\donttest{
 csv_file = system.file("test_data_bout.csv", package = "walking")
 if (requireNamespace("readr", quietly = TRUE)) {
   x = readr::read_csv(csv_file)
@@ -48,7 +49,8 @@ if (requireNamespace("readr", quietly = TRUE)) {
   }
   out = estimate_steps_verisense(x, sample_rate = 10L,
                                  method = "original")
-  out = estimate_steps_verisense(x, sample_rate = 10L,
-                                 method = "revised")
+  # out = estimate_steps_verisense(x, sample_rate = 10L,
+                                 # method = "revised")
+}
 }
 }

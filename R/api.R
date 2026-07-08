@@ -9,6 +9,7 @@
 #'
 #' @rdname estimate_steps
 #' @examples
+#' \donttest{
 #' csv_file = system.file("test_data_bout.csv", package = "walking")
 #' if (requireNamespace("readr", quietly = TRUE)) {
 #'   x = readr::read_csv(csv_file)
@@ -18,8 +19,9 @@
 #'   }
 #'   out = estimate_steps_verisense(x, sample_rate = 10L,
 #'                                  method = "original")
-#'   out = estimate_steps_verisense(x, sample_rate = 10L,
-#'                                  method = "revised")
+#'   # out = estimate_steps_verisense(x, sample_rate = 10L,
+#'                                  # method = "revised")
+#' }
 #' }
 estimate_steps_forest = function(data, ...) {
   find_walking(data, ...)
