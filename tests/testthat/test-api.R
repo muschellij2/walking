@@ -36,6 +36,23 @@ testthat::test_that("estimate_steps_verisense validates inputs and dispatches me
   )
 })
 
+testthat::test_that("estimate_steps_forest matches find_walking", {
+  skip_if_no_forest()
+  testthat::skip_if_not_installed("readr")
+
+  csv_file = system.file("test_data_bout.csv", package = "walking")
+  data = readr::read_csv(csv_file)
+  colnames(data)[colnames(data) == "UTC time"] = "time"
+
+  suppressWarnings({
+    expected = find_walking(data, sample_rate_analysis = 10L, verbose = FALSE)
+    actual = estimate_steps_forest(data, sample_rate_analysis = 10L, verbose = FALSE)
+  })
+
+  testthat::expect_s3_class(actual, "data.frame")
+  testthat::expect_identical(actual, expected)
+})
+
 
 testthat::test_that("estimate_steps_sdt matches sdt_count_steps", {
   times = as.POSIXct("2020-01-01 00:00:00", tz = "UTC") + seq(0, by = 0.01, length.out = 100)
@@ -46,7 +63,7 @@ testthat::test_that("estimate_steps_sdt matches sdt_count_steps", {
     Z = 0
   )
 
-  wrist = sdt_count_steps(data, sample_rate = 100L, location = "wrist", verbose = FALSE)
+  wrist = sdt_count_steps(data, sample_rate = 100L, location = "wrist", verbose = TRUE)
   waist = sdt_count_steps(data, sample_rate = 100L, location = "waist", verbose = FALSE)
   wrapper = estimate_steps_sdt(data, sample_rate = 100L, location = "wrist", verbose = FALSE)
 

@@ -5,8 +5,9 @@ testthat::test_that("actibase::acti_resample gives fixed answer", {
   testthat::skip_if_not_installed("readr")
   data = readr::read_csv(csv_file)
   colnames(data)[colnames(data) == "UTC time"] = "time"
-  data = standardize_data(data)
+  data = actibase::acti_standardize_data(data, colname_time = "HEADER_TIMESTAMP")
   new_data = actibase::acti_resample(data, sample_rate = 5)
+  new_data = actibase::acti_standardize_data(new_data, colname_time = "HEADER_TIMESTAMP")
   testthat::expect_named(new_data, c("HEADER_TIMESTAMP", "X", "Y", "Z"))
 
 
@@ -29,7 +30,7 @@ testthat::test_that("actibase::acti_resample gives fixed answer", {
                                             times = data$HEADER_TIMESTAMP,
                                             method = "linear",
                                             rule = 2)
-  testthat::expect_named(remade_data, c("HEADER_TIMESTAMP", "X", "Y", "Z"))
+  testthat::expect_named(remade_data, c("time", "X", "Y", "Z"))
 
   stopifnot(all(dim(remade_data) == dim(data)))
   # some are NA because the times are outside scope

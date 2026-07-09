@@ -39,18 +39,23 @@ A \code{data.frame} of seconds and steps
 Estimate Steps with Unified Syntax
 }
 \examples{
-\donttest{
+run_example = FALSE
 csv_file = system.file("test_data_bout.csv", package = "walking")
 if (requireNamespace("readr", quietly = TRUE)) {
+  run_example = TRUE
   x = readr::read_csv(csv_file)
   colnames(x)[colnames(x) == "UTC time"] = "time"
-  if (reticulate::py_module_available("forest")) {
-    out = estimate_steps_forest(x, sample_rate_analysis = 10L)
-  }
   out = estimate_steps_verisense(x, sample_rate = 10L,
                                  method = "original")
-  # out = estimate_steps_verisense(x, sample_rate = 10L,
-                                 # method = "revised")
+  out = estimate_steps_verisense(x, sample_rate = 10L,
+                                 method = "revised")
+  out = estimate_steps_sdt(x, sample_rate = 10L)
 }
+\donttest{
+if (requireNamespace("readr", quietly = TRUE) &&
+    reticulate::py_module_available("forest")) {
+    out = estimate_steps_forest(x, sample_rate_analysis = 10L)
+  }
 }
+
 }

@@ -6,6 +6,10 @@ testthat::test_that("preprocess_bout gives same as preprocess_bout_r", {
   colnames(data)[colnames(data) == "UTC time"] = "time"
   bout = preprocess_bout(data, sample_rate = 10)
   bout_r = preprocess_bout_r(data, sample_rate = 10)
+  testthat::expect_named(bout, c("vm_bout", "vm_data"))
+  testthat::expect_s3_class(bout$vm_data, "data.frame")
+  testthat::expect_named(bout$vm_data, c("time", "vm"))
+  testthat::expect_identical(length(bout$vm_bout), 2L)
   testthat::expect_equal(bout$vm_data$time, bout_r$vm_data$time)
   testthat::expect_true(
     all(abs(bout$vm_data$vm - bout_r$vm_data$vm) <= 1e-4)
