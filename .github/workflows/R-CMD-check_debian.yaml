@@ -11,19 +11,61 @@ permissions: read-all
 
 jobs:
   R-CMD-check:
-    runs-on: ubuntu-latest  # Spins up the default cloud runner
+    runs-on: ubuntu-latest
+    name: Debian sid (R devel, GCC 16)
     container:
-      image: debian:bookworm-slim  # Switches the execution environment to Debian
+      image: debian:sid
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
+      CC: gcc-16
+      CXX: g++-16
+      FC: gfortran-16
+      F77: gfortran-16
+      LANG: C.UTF-8
+      LC_ALL: C.UTF-8
 
     steps:
       - uses: actions/checkout@v6
 
+      - name: Install Debian sid toolchain and system requirements
+        run: |
+          apt-get update
+          DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            ca-certificates \
+            curl \
+            file \
+            gcc-16 \
+            g++-16 \
+            git \
+            gfortran-16 \
+            libbz2-dev \
+            libc6-dev \
+            libcurl4-openssl-dev \
+            libjpeg-dev \
+            liblzma-dev \
+            libpcre2-dev \
+            libpng-dev \
+            libreadline-dev \
+            libssl-dev \
+            libtiff-dev \
+            libxml2-dev \
+            make \
+            procps \
+            python3 \
+            python3-venv \
+            qpdf \
+            tar \
+            xz-utils \
+            zlib1g-dev
+
       - uses: r-lib/actions/setup-pandoc@v2
 
       - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: devel
+          http-user-agent: release
+          use-public-rspm: false
         
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
@@ -31,9 +73,17 @@ jobs:
           needs: check
 
       - uses: actions/setup-python@v4
-        if: matrix.config.python != 'debug'
         with:
           python-version: 3.11
+
+      - name: Show R and compiler details
+        run: |
+          R --version
+          R CMD config CC
+          R CMD config CXX
+          R CMD config FC
+          gcc-16 --version | head -n 1
+          gfortran-16 --version | head -n 1
 
       - uses: r-lib/actions/check-r-package@v2
         with:
