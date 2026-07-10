@@ -12,33 +12,33 @@ permissions: read-all
 jobs:
   R-CMD-check:
     runs-on: ubuntu-latest
-    name: Debian sid (R devel, GCC 16)
+    name: Debian 12 (R devel)
     container:
-      image: debian:sid
+      image: debian:12
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
-      CC: gcc-16
-      CXX: g++-16
-      FC: gfortran-16
-      F77: gfortran-16
+      CC: gcc
+      CXX: g++
+      FC: gfortran
+      F77: gfortran
       LANG: C.UTF-8
       LC_ALL: C.UTF-8
 
     steps:
       - uses: actions/checkout@v6
 
-      - name: Install Debian sid toolchain and system requirements
+      - name: Install Debian 12 toolchain and system requirements
         run: |
           apt-get update
           DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
             ca-certificates \
             curl \
             file \
-            gcc-16 \
-            g++-16 \
+            gcc \
+            g++ \
             git \
-            gfortran-16 \
+            gfortran \
             libbz2-dev \
             libc6-dev \
             libcurl4-openssl-dev \
@@ -82,8 +82,8 @@ jobs:
           R CMD config CC
           R CMD config CXX
           R CMD config FC
-          gcc-16 --version | head -n 1
-          gfortran-16 --version | head -n 1
+          gcc --version | head -n 1
+          gfortran --version | head -n 1
 
       - uses: r-lib/actions/check-r-package@v2
         with:
