@@ -8,7 +8,10 @@
 #'
 #' @examples
 #' \donttest{
+#' files <- list.files()
 #' py_require_forest()
+#' cleanup_uv_lock_files()
+#' stopifnot(length(setdiff(list.files(), files)) == 0L)
 #' }
 py_require_forest = function(python_version = "3.11", ...) {
   reticulate::py_require(

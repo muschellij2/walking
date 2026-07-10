@@ -1,3 +1,17 @@
+cleanup_uv_lock_files = function(path = ".") {
+  lock_files = list.files(
+    path = path,
+    pattern = "^uv.*[.]lock$",
+    full.names = TRUE
+  )
+
+  if (length(lock_files) > 0) {
+    invisible(file.remove(lock_files))
+  } else {
+    invisible(logical())
+  }
+}
+
 oak_base = function() {
   if (!reticulate::py_module_available("forest")) {
     stop(
