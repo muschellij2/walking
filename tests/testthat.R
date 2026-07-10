@@ -8,7 +8,7 @@
 
 library(testthat)
 library(walking)
-
+py_require_forest()
 # if (walking::have_walking_condaenv()) {
 #   walking::unset_reticulate_python()
 #   walking::use_walking_condaenv()
