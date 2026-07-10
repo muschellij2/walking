@@ -5,4 +5,4 @@
 
 * This is a new release.
 ---
-Initial submission now that actibase/actiread in CRAN.
+Detritus issue fixed. Initial submission now that actibase/actiread in CRAN.
