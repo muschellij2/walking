@@ -21,7 +21,7 @@ Require Forest module
 \donttest{
 files <- list.files()
 py_require_forest()
-cleanup_uv_lock_files()
+walking:::cleanup_uv_lock_files()
 stopifnot(length(setdiff(list.files(), files)) == 0L)
 }
 }
