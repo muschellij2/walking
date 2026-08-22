@@ -5,4 +5,4 @@
 
 * This is a new release.
 ---
-Fixing DESCRIPTION issues.
+Disabling parallelization for method that is passed to `actimetrics`.

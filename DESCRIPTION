@@ -1,6 +1,6 @@
 Package: walking
 Title: Segments Accelerometry Data into Walking Bouts using Open Source Methods
-Version: 0.7.0
+Version: 0.8.0
 Authors@R: 
     person(given = "John",
            family = "Muschelli",

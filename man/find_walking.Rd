@@ -13,7 +13,8 @@ find_walking(
   beta = 2.5,
   min_duration_peak = 3L,
   delta = 20L,
-  verbose = TRUE
+  verbose = TRUE,
+  disable_parellelization = TRUE
 )
 }
 \arguments{
@@ -40,6 +41,10 @@ and within step frequency range}
 (in multiplication of 0.05Hz)}
 
 \item{verbose}{print diagnostic messages}
+
+\item{disable_parellelization}{disable any back-end parallelization
+that is done in oak that is from \code{ssqueezepy}.
+See \url{https://github.com/OverLordGoldDragon/ssqueezepy#gpu--cpu-acceleration}}
 }
 \value{
 A vector of number of steps per second

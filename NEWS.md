@@ -1,3 +1,7 @@
+# walking 0.8.0
+
+* Removed parallelization option for `oak`.
+
 # walking 0.7.0
 
 * Reworked `walking` to use `actibase` functions now in CRAN.
