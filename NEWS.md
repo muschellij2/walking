@@ -1,3 +1,7 @@
+# walking 0.8.1
+
+* Typo in the new argument for disabling parallelization for python call.
+
 # walking 0.8.0
 
 * Removed parallelization option for `oak`.

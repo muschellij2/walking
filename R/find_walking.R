@@ -20,7 +20,7 @@
 #' (in multiplication of 0.05Hz)
 #' @param min_duration_peak minimum duration of peaks (in seconds)
 #' @param verbose print diagnostic messages
-#' @param disable_parellelization disable any back-end parallelization
+#' @param disable_parallelization disable any back-end parallelization
 #' that is done in oak that is from `ssqueezepy`.
 #' See <https://github.com/OverLordGoldDragon/ssqueezepy#gpu--cpu-acceleration>
 #'
@@ -47,10 +47,10 @@ find_walking = function(
     min_duration_peak = 3L,
     delta = 20L,
     verbose = TRUE,
-    disable_parellelization = TRUE
+    disable_parallelization = TRUE
 ) {
 
-  if (disable_parellelization) {
+  if (disable_parallelization) {
     # needed because
     # https://github.com/OverLordGoldDragon/ssqueezepy#gpu--cpu-acceleration
     ssq_previous = Sys.getenv("SSQ_PARALLEL", unset = NA)

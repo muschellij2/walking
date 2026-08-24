@@ -14,7 +14,7 @@ find_walking(
   min_duration_peak = 3L,
   delta = 20L,
   verbose = TRUE,
-  disable_parellelization = TRUE
+  disable_parallelization = TRUE
 )
 }
 \arguments{
@@ -42,7 +42,7 @@ and within step frequency range}
 
 \item{verbose}{print diagnostic messages}
 
-\item{disable_parellelization}{disable any back-end parallelization
+\item{disable_parallelization}{disable any back-end parallelization
 that is done in oak that is from \code{ssqueezepy}.
 See \url{https://github.com/OverLordGoldDragon/ssqueezepy#gpu--cpu-acceleration}}
 }

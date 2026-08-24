@@ -5,4 +5,4 @@
 
 * This is a new release.
 ---
-Disabling parallelization for method that is passed to `actimetrics`.
+Hotfix: typo in the new argument for disabling parallelization for python call.
