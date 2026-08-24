@@ -6,6 +6,7 @@
 # * https://r-pkgs.org/testing-design.html#sec-tests-files-overview
 # * https://testthat.r-lib.org/articles/special-files.html
 
+Sys.setenv("SSQ_PARALLEL" = 0)
 library(testthat)
 library(walking)
 py_require_forest()

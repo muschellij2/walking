@@ -60,6 +60,7 @@ Frequency components are extracted with Continuous Wavelet Transform.
 }
 \examples{
 \donttest{
+  Sys.setenv("SSQ_PARALLEL" = 0)
   csv_file = system.file("test_data_bout.csv", package = "walking")
   if (requireNamespace("readr", quietly = TRUE) && reticulate::py_module_available("forest")) {
     x = readr::read_csv(csv_file)

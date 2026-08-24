@@ -22,6 +22,7 @@
 #'   out = estimate_steps_sdt(x, sample_rate = 10L)
 #' }
 #' \donttest{
+#'   Sys.setenv("SSQ_PARALLEL" = 0)
 #'   if (requireNamespace("readr", quietly = TRUE) &&
 #'     reticulate::py_module_available("forest")) {
 #'     out = estimate_steps_forest(x, sample_rate_analysis = 10L)
