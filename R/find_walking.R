@@ -57,7 +57,7 @@ find_walking = function(
     if (is.na(ssq_previous)) {
       on.exit({Sys.unsetenv("SSQ_PARALLEL")}, add = TRUE)
     } else {
-      on.exit({Sys.setenv("SSQ_PARALLEL", ssq_previous)}, add = TRUE)
+      on.exit({Sys.setenv("SSQ_PARALLEL" = ssq_previous)}, add = TRUE)
     }
     Sys.setenv("SSQ_PARALLEL" = 0)
   }

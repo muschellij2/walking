@@ -5,4 +5,5 @@
 
 * This is a new release.
 ---
-Hotfix: typo in the new argument for disabling parallelization for python call.
+Hotfix: typo in the new argument for disabling parallelization for python call.  
+And then there was bug in the code after that.
