@@ -20,9 +20,13 @@
 #' (in multiplication of 0.05Hz)
 #' @param min_duration_peak minimum duration of peaks (in seconds)
 #' @param verbose print diagnostic messages
-#' @param disable_parallelization disable any back-end parallelization
-#' that is done in oak that is from `ssqueezepy`.
-#' See <https://github.com/OverLordGoldDragon/ssqueezepy#gpu--cpu-acceleration>
+#' @param disable_parallelization Whether to disable the CPU parallelization
+#' used by `oak` through `ssqueezepy`. Parallelization can speed up larger
+#' analyses but may conflict with an R/Python environment or its threading and
+#' OpenMP configuration. The default, `TRUE`, sets `SSQ_PARALLEL=0` while this
+#' function runs. If `forest` fails to load, set `Sys.setenv(SSQ_PARALLEL = 0)`
+#' before calling [py_require_forest()] and `reticulate::import("forest")`.
+#' See <https://github.com/OverLordGoldDragon/ssqueezepy#gpu--cpu-acceleration>.
 #'
 #' @return A vector of number of steps per second
 

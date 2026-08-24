@@ -44,6 +44,29 @@ Python environment where `forest` and its dependencies already resolve cleanly,
 then point `reticulate` at that environment with `use_condaenv()` or
 `use_python()`.
 
+### Parallel processing and `ssqueezepy`
+
+`forest`'s `oak` workflow uses [`ssqueezepy`](https://github.com/OverLordGoldDragon/ssqueezepy#gpu--cpu-acceleration)
+for wavelet processing. `ssqueezepy` can parallelize CPU work, which can make
+larger analyses faster but may conflict with an R/Python environment or its
+threading and OpenMP configuration. `find_walking()` disables this back-end
+parallelization by default (`disable_parallelization = TRUE`) for a more
+reliable R-session default. Set `disable_parallelization = FALSE` only when
+you want to use the acceleration and your environment supports it.
+
+If an error occurs while loading `forest`, or while running the wavelet step,
+set `SSQ_PARALLEL` before the first `forest` import. This disables
+`ssqueezepy` parallelization for the R session:
+
+```r
+Sys.setenv(SSQ_PARALLEL = 0)
+walking::py_require_forest()
+reticulate::import("forest")
+```
+
+See the [`ssqueezepy` GPU / CPU acceleration documentation](https://github.com/OverLordGoldDragon/ssqueezepy#gpu--cpu-acceleration)
+for its parallelization settings.
+
 ## Example
 
 This is a basic example which shows you how to solve a common problem:
